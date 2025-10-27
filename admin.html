@@ -757,6 +757,24 @@ body {
     <script src="supabase-config.js"></script>
     
     <script>
+        // ===== LOGIN FUNCTIONALITY =====
+function handleLogin(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
+        // Successful login
+        loginContainer.style.display = 'none';
+        adminPanel.style.display = 'block';
+        errorMessage.style.display = 'none';
+        
+        // Initialize admin panel after login
+        initAdminPanelAfterLogin();
+    } else {
+        // Failed login
+        errorMessage.style.display = 'block';
         // ===== PASSWORD MANAGEMENT SYSTEM =====
         const STORAGE_KEY = 'deliciousBitesAdminCredentials';
         
@@ -1302,3 +1320,4 @@ body {
 </body>
 
 </html>
+
