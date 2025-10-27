@@ -1,1 +1,0 @@
-sample QR CODE Menu for resturants
