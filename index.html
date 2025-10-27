@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delicious Bites - Digital Menu</title>
+    <style>
+        /* Your existing CSS remains exactly the same */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            padding-bottom: 20px;
+        }
+
+        /* ... ALL YOUR EXISTING CSS ... */
+        
+        /* Add loading indicator */
+        .sync-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: #ee5a24;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+        }
+
+        .sync-indicator.syncing {
+            background: #f39c12;
+        }
+
+        .sync-indicator.success {
+            background: #27ae60;
+        }
+
+        .sync-indicator.error {
+            background: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sync Indicator -->
+    <div class="sync-indicator" id="syncIndicator">🔄 Syncing...</div>
+
+    <!-- Your existing HTML structure remains the same -->
+    <header class="header">
+        <div class="brand-content">
+            <span class="brand-icon">🍽️</span>
+            <div class="brand-name">DELICIOUS BITES</div>
+            <div class="brand-tagline">Serving Happiness Since 2010</div>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <div class="search-section">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search menu items...">
+        </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-section">
+        <div class="section-title">Browse Categories</div>
+        <div class="category-filter">
+            <button class="filter-btn active" data-category="all">All</button>
+            <button class="filter-btn" data-category="breakfast">🍳 Breakfast</button>
+            <button class="filter-btn" data-category="lunch">🍔 Lunch</button>
+            <button class="filter-btn" data-category="dinner">🍕 Dinner</button>
+            <button class="filter-btn" data-category="dessert">🍦 Dessert</button>
+            <button class="filter-btn" data-category="drinks">☕ Drinks</button>
+            <button class="filter-btn" data-category="specials">⭐ Specials</button>
+            <button class="filter-btn" data-category="favorites">❤️ Favorites</button>
+        </div>
+    </div>
+
+    <!-- Menu Grid -->
+    <div class="menu-container">
+        <div class="section-title">Our Menu</div>
+        <div class="menu-grid" id="menuGrid">
+            <div class="loading">
+                <div style="font-size: 2rem; margin-bottom: 15px;">🔄</div>
+                Loading menu...
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeModal">✕</button>
+            <div class="detail-image-container" id="detailImageContainer">
+                <img class="detail-image" id="detailImage" alt="Food item">
+                <div class="detail-image-placeholder" id="detailImagePlaceholder">Loading image...</div>
+                <div class="detail-badge" id="detailBadge">Popular</div>
+                <button class="detail-favorite" id="detailFavorite">🤍</button>
+            </div>
+            <div class="detail-content">
+                <h1 class="detail-name" id="detailName">Double Beef Cheese Burger</h1>
+                <div class="detail-location" id="detailLocation">Naperville, Illinois</div>
+                
+                <div class="nutrition-info">
+                    <div class="nutrition-item">
+                        <div class="nutrition-value" id="nutritionCalories">198</div>
+                        <div class="nutrition-label">kcal</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="nutrition-value" id="nutritionProteins">23.2</div>
+                        <div class="nutrition-label">proteins</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="nutrition-value" id="nutritionFats">13.8</div>
+                        <div class="nutrition-label">fats</div>
+                    </div>
+                    <div class="nutrition-item">
+                        <div class="nutrition-value" id="nutritionCarbs">23.7</div>
+                        <div class="nutrition-label">carbs</div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Description</h3>
+                    <p class="detail-description" id="detailDescription">
+                        Burger with party filled with macaroni & cheese and real beef. 
+                        Stroganoff sauce, topped with onions, served on a soft black 
+                        steamer burger bar with pany fit.
+                    </p>
+                </div>
+
+                <div class="item-price" style="justify-content: center; margin: 20px 0; font-size: 1.6rem;">
+                    ETB 459.00
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Notification -->
+    <div class="cart-notification" id="cartNotification">Item added to cart!</div>
+
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script>
+        // ===== SUPABASE CONFIGURATION =====
+        // Replace these with your actual Supabase credentials
+        const SUPABASE_CONFIG = {
+            url: 'https://your-project.supabase.co',
+            anonKey: 'your-anon-key'
+        };
+
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+        // ===== APPLICATION STATE =====
+        let menuData = [];
+        let currentFilter = 'all';
+        let currentSearchTerm = '';
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let currentItem = null;
+
+        // DOM Elements
+        const menuGrid = document.getElementById('menuGrid');
+        const detailModal = document.getElementById('detailModal');
+        const closeModal = document.getElementById('closeModal');
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const cartNotification = document.getElementById('cartNotification');
+        const searchInput = document.getElementById('searchInput');
+        const detailFavorite = document.getElementById('detailFavorite');
+        const detailImage = document.getElementById('detailImage');
+        const detailImagePlaceholder = document.getElementById('detailImagePlaceholder');
+        const syncIndicator = document.getElementById('syncIndicator');
+
+        // ===== SUPABASE DATA MANAGEMENT =====
+        
+        // Load menu items from Supabase
+        async function loadMenuItems() {
+            showSyncIndicator('🔄 Loading menu...', 'syncing');
+            
+            try {
+                const { data, error } = await supabase
+                    .from('menu_items')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    throw error;
+                }
+
+                menuData = data || [];
+                
+                if (menuData.length === 0) {
+                    showEmptyMenuMessage();
+                } else {
+                    renderMenuItems(menuData);
+                }
+                
+                showSyncIndicator('✅ Menu loaded', 'success');
+                setTimeout(() => hideSyncIndicator(), 2000);
+                
+            } catch (error) {
+                console.error('Error loading menu:', error);
+                showSyncIndicator('❌ Failed to load menu', 'error');
+                setTimeout(() => hideSyncIndicator(), 3000);
+                
+                // Fallback: Show empty state
+                showEmptyMenuMessage();
+            }
+        }
+
+        // Set up real-time subscription
+        function setupRealtimeSubscription() {
+            const subscription = supabase
+                .channel('menu-changes')
+                .on(
+                    'postgres_changes',
+                    {
+                        event: '*',
+                        schema: 'public',
+                        table: 'menu_items'
+                    },
+                    (payload) => {
+                        console.log('Real-time update received:', payload);
+                        handleRealtimeUpdate(payload);
+                    }
+                )
+                .subscribe();
+
+            return subscription;
+        }
+
+        // Handle real-time updates
+        function handleRealtimeUpdate(payload) {
+            showSyncIndicator('🔄 Updating menu...', 'syncing');
+            
+            switch (payload.eventType) {
+                case 'INSERT':
+                    menuData.unshift(payload.new);
+                    break;
+                case 'UPDATE':
+                    const updateIndex = menuData.findIndex(item => item.id === payload.new.id);
+                    if (updateIndex !== -1) {
+                        menuData[updateIndex] = payload.new;
+                    }
+                    break;
+                case 'DELETE':
+                    menuData = menuData.filter(item => item.id !== payload.old.id);
+                    break;
+            }
+
+            renderMenuItems(menuData);
+            
+            showSyncIndicator('✅ Menu updated', 'success');
+            setTimeout(() => hideSyncIndicator(), 2000);
+        }
+
+        // ===== UI MANAGEMENT =====
+        
+        function showSyncIndicator(text, type = 'syncing') {
+            syncIndicator.textContent = text;
+            syncIndicator.className = `sync-indicator ${type}`;
+            syncIndicator.style.display = 'block';
+        }
+
+        function hideSyncIndicator() {
+            syncIndicator.style.display = 'none';
+        }
+
+        function showEmptyMenuMessage() {
+            menuGrid.innerHTML = `
+                <div class="loading" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">🍽️</div>
+                    <h3 style="margin-bottom: 15px; color: #2d3436;">Welcome to Delicious Bites!</h3>
+                    <p style="color: #636e72; margin-bottom: 25px; line-height: 1.6;">
+                        Our digital menu is being prepared.<br>
+                        Delicious items coming soon!
+                    </p>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; display: inline-block;">
+                        <strong>Live Menu</strong><br>
+                        <span style="color: #ee5a24;">Updates automatically</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ===== EXISTING FUNCTIONS (UPDATED FOR SUPABASE) =====
+        
+        // Render menu items
+        function renderMenuItems(items) {
+            // Clear previous items
+            menuGrid.innerHTML = '';
+            
+            if (items.length === 0) {
+                showEmptyMenuMessage();
+                return;
+            }
+            
+            // Use document fragment for better performance
+            const fragment = document.createDocumentFragment();
+            
+            items.forEach(item => {
+                const isFavorite = favorites.includes(item.id);
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                
+                menuItem.innerHTML = `
+                    <div class="item-image-container">
+                        <img class="item-image" src="${item.image}" alt="${item.name}" loading="lazy">
+                        <div class="image-placeholder">Loading image...</div>
+                        <div class="item-badge">${item.badge}</div>
+                        <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${item.id}">
+                            ${isFavorite ? '❤' : '🤍'}
+                        </button>
+                    </div>
+                    <div class="item-content">
+                        <h3 class="item-name">${item.name}</h3>
+                        <p class="item-description">${item.description}</p>
+                        <div class="item-price">
+                            ${formatPrice(item.price)}
+                            <button class="view-details" data-id="${item.id}">👀</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners directly
+                menuItem.addEventListener('click', () => openDetailModal(item));
+                
+                const favoriteBtn = menuItem.querySelector('.favorite-btn');
+                favoriteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const itemId = parseInt(favoriteBtn.getAttribute('data-id'));
+                    toggleFavorite(itemId);
+                });
+                
+                const viewDetailsBtn = menuItem.querySelector('.view-details');
+                viewDetailsBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const itemId = viewDetailsBtn.getAttribute('data-id');
+                    const item = menuData.find(i => i.id == itemId);
+                    openDetailModal(item);
+                });
+                
+                // Handle image loading for this item
+                const img = menuItem.querySelector('.item-image');
+                const placeholder = menuItem.querySelector('.image-placeholder');
+                
+                img.addEventListener('load', function() {
+                    this.classList.add('loaded');
+                    placeholder.classList.add('hidden');
+                });
+                
+                img.addEventListener('error', function() {
+                    console.error(`Failed to load image: ${this.src}`);
+                });
+                
+                fragment.appendChild(menuItem);
+            });
+            
+            menuGrid.appendChild(fragment);
+        }
+
+        // Open detail modal
+        function openDetailModal(item) {
+            currentItem = item;
+            const isFavorite = favorites.includes(item.id);
+            
+            // Reset image state
+            detailImage.classList.remove('loaded');
+            detailImagePlaceholder.classList.remove('hidden');
+            
+            // Set the image source for the detail view
+            detailImage.src = item.image;
+            detailImage.alt = item.name;
+            
+            // Handle image loading for detail view
+            detailImage.addEventListener('load', function() {
+                this.classList.add('loaded');
+                detailImagePlaceholder.classList.add('hidden');
+            });
+            
+            detailImage.addEventListener('error', function() {
+                console.error(`Failed to load detail image: ${this.src}`);
+            });
+            
+            document.getElementById('detailBadge').textContent = item.badge;
+            document.getElementById('detailFavorite').innerHTML = isFavorite ? '❤' : '🤍';
+            document.getElementById('detailFavorite').className = `detail-favorite ${isFavorite ? 'active' : ''}`;
+            document.getElementById('detailName').textContent = item.name;
+            document.getElementById('detailLocation').textContent = item.location;
+            document.getElementById('detailDescription').textContent = item.description;
+            
+            // Handle nutrition data (could be JSON string or object)
+            let nutrition = item.nutrition;
+            if (typeof nutrition === 'string') {
+                try {
+                    nutrition = JSON.parse(nutrition);
+                } catch (e) {
+                    nutrition = { calories: 0, proteins: 0, fats: 0, carbs: 0 };
+                }
+            }
+            
+            document.getElementById('nutritionCalories').textContent = nutrition.calories || 0;
+            document.getElementById('nutritionProteins').textContent = nutrition.proteins || 0;
+            document.getElementById('nutritionFats').textContent = nutrition.fats || 0;
+            document.getElementById('nutritionCarbs').textContent = nutrition.carbs || 0;
+            
+            // Update price in modal
+            const priceElement = document.querySelector('.modal-content .item-price');
+            priceElement.textContent = formatPrice(item.price);
+            
+            detailModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Add event listener to modal favorite button
+            document.getElementById('detailFavorite').addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleFavorite(item.id);
+            });
+        }
+
+        // Close modal
+        function closeDetailModal() {
+            detailModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Filter menu items
+        function filterMenu(category) {
+            currentFilter = category;
+            applyFilters();
+        }
+
+        // Apply both category filter and search
+        function applyFilters() {
+            let filteredItems = menuData;
+            
+            // Apply category filter
+            if (currentFilter !== 'all') {
+                if (currentFilter === 'favorites') {
+                    filteredItems = menuData.filter(item => favorites.includes(item.id));
+                } else {
+                    filteredItems = menuData.filter(item => item.category === currentFilter);
+                }
+            }
+            
+            // Apply search filter
+            if (currentSearchTerm) {
+                const term = currentSearchTerm.toLowerCase();
+                filteredItems = filteredItems.filter(item => 
+                    item.name.toLowerCase().includes(term) || 
+                    item.description.toLowerCase().includes(term)
+                );
+            }
+            
+            renderMenuItems(filteredItems);
+        }
+
+        // Toggle favorite status
+        function toggleFavorite(itemId) {
+            const index = favorites.indexOf(itemId);
+            
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(itemId);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            
+            // Update UI
+            updateFavoritesUI();
+            
+            // If we're on the favorites filter, update the view
+            if (currentFilter === 'favorites') {
+                applyFilters();
+            }
+        }
+
+        // Update favorites UI
+        function updateFavoritesUI() {
+            // Update all favorite buttons
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const itemId = parseInt(btn.getAttribute('data-id'));
+                const isFavorite = favorites.includes(itemId);
+                
+                if (isFavorite) {
+                    btn.classList.add('active');
+                    btn.innerHTML = '❤';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '🤍';
+                }
+            });
+            
+            // Update modal favorite button if open
+            if (currentItem) {
+                const modalFavorite = document.getElementById('detailFavorite');
+                const isFavorite = favorites.includes(currentItem.id);
+                
+                if (isFavorite) {
+                    modalFavorite.classList.add('active');
+                    modalFavorite.innerHTML = '❤';
+                } else {
+                    modalFavorite.classList.remove('active');
+                    modalFavorite.innerHTML = '🤍';
+                }
+            }
+        }
+
+        // Add to cart function
+        function addToCart(itemId) {
+            // Show notification
+            cartNotification.style.display = 'flex';
+            setTimeout(() => {
+                cartNotification.style.display = 'none';
+            }, 2000);
+        }
+
+        // Format price for Ethiopian currency
+        function formatPrice(price) {
+            return `ETB ${parseFloat(price).toFixed(2)}`;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Filter buttons
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterMenu(btn.dataset.category);
+                });
+            });
+
+            // Search input with debouncing for performance
+            let searchTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    currentSearchTerm = e.target.value;
+                    applyFilters();
+                }, 300);
+            });
+
+            // Close modal
+            closeModal.addEventListener('click', closeDetailModal);
+            detailModal.addEventListener('click', (e) => {
+                if (e.target === detailModal) {
+                    closeDetailModal();
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeDetailModal();
+                }
+            });
+        }
+
+        // ===== INITIALIZATION =====
+        async function initializeMenu() {
+            try {
+                // Load menu items from Supabase
+                await loadMenuItems();
+                
+                // Set up real-time subscription
+                setupRealtimeSubscription();
+                
+                // Set up UI event listeners
+                setupEventListeners();
+                updateFavoritesUI();
+                
+                console.log('Menu initialized with Supabase');
+            } catch (error) {
+                console.error('Failed to initialize menu:', error);
+                showEmptyMenuMessage();
+            }
+        }
+
+        // Start the application
+        document.addEventListener('DOMContentLoaded', initializeMenu);
+    </script>
+</body>
+</html>
