@@ -6,3 +6,4 @@ const SUPABASE_CONFIG = {
 
 // Initialize Supabase
 const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
