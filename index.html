@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delicious Bites - Digital Menu</title>
     <style>
-        /* Your existing CSS remains exactly the same */
+        /* ===== MAIN STYLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -19,9 +19,512 @@
             padding-bottom: 20px;
         }
 
-        /* ... ALL YOUR EXISTING CSS ... */
-        
-        /* Add loading indicator */
+        /* Header & Branding */
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 20px 15px;
+            margin: 10px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .brand-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .brand-tagline {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .brand-icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 0 10px;
+            margin: 15px 0;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-container::before {
+            content: "🔍";
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #636e72;
+            font-size: 1rem;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 14px 15px 14px 45px;
+            border: none;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+        }
+
+        #searchInput:focus {
+            outline: none;
+            box-shadow: 0 2px 8px rgba(238, 90, 36, 0.2);
+        }
+
+        /* Category Filter */
+        .category-section {
+            padding: 0 10px;
+            margin: 15px 0;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2d3436;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title::before {
+            content: "≡";
+            margin-right: 8px;
+            color: #ee5a24;
+        }
+
+        .category-filter {
+            padding: 12px 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .category-filter::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 18px;
+            margin-right: 10px;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+            color: #555;
+        }
+
+        .filter-btn.active {
+            background: #ee5a24;
+            color: white;
+            box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
+        }
+
+        /* Menu Grid */
+        .menu-container {
+            padding: 0 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .menu-item:active {
+            transform: scale(0.98);
+        }
+
+        .item-image-container {
+            width: 100%;
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            opacity: 0;
+        }
+
+        .item-image.loaded {
+            opacity: 1;
+        }
+
+        .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+            font-size: 0.9rem;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            transition: opacity 0.3s ease;
+        }
+
+        .image-placeholder.hidden {
+            opacity: 0;
+        }
+
+        .menu-item:hover .item-image {
+            transform: scale(1.05);
+        }
+
+        .item-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #ee5a24;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 0.85rem;
+            z-index: 2;
+        }
+
+        .favorite-btn.active {
+            color: #ff4757;
+        }
+
+        .item-content {
+            padding: 12px;
+        }
+
+        .item-name {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #2d3436;
+        }
+
+        .item-description {
+            color: #636e72;
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2rem;
+        }
+
+        .item-price {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #ee5a24;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .view-details {
+            background: #ee5a24;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 30px;
+            font-size: 1rem;
+            color: #636e72;
+            grid-column: 1 / -1;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            padding: 10px;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 0 auto;
+            border-radius: 20px;
+            max-width: 500px;
+            position: relative;
+            animation: slideUp 0.3s ease;
+            overflow: hidden;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .detail-image-container {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+        }
+
+        .detail-image.loaded {
+            opacity: 1;
+        }
+
+        .detail-image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+            font-size: 1.1rem;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        }
+
+        .detail-image-placeholder.hidden {
+            opacity: 0;
+        }
+
+        .detail-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: #ee5a24;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .detail-favorite {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+
+        .detail-favorite.active {
+            color: #ff4757;
+        }
+
+        .detail-content {
+            padding: 20px;
+        }
+
+        .detail-name {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            color: #2d3436;
+        }
+
+        .detail-location {
+            color: #636e72;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .detail-location::before {
+            content: "📍";
+            margin-right: 6px;
+        }
+
+        .nutrition-info {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .nutrition-item {
+            text-align: center;
+        }
+
+        .nutrition-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #ee5a24;
+        }
+
+        .nutrition-label {
+            font-size: 0.75rem;
+            color: #636e72;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #2d3436;
+            display: flex;
+            align-items: center;
+        }
+
+        .detail-section h3::before {
+            content: "📝";
+            margin-right: 8px;
+        }
+
+        .detail-description {
+            color: #2d3436;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .cart-notification {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #ee5a24;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            z-index: 999;
+            font-weight: 600;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .cart-notification::before {
+            content: "✓";
+            margin-right: 6px;
+            font-size: 1.1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sync Indicator */
         .sync-indicator {
             position: fixed;
             top: 10px;
@@ -48,13 +551,27 @@
         .sync-indicator.error {
             background: #e74c3c;
         }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 16px;
+            }
+            .item-image-container {
+                height: 140px;
+            }
+            .detail-image-container {
+                height: 300px;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Sync Indicator -->
     <div class="sync-indicator" id="syncIndicator">🔄 Syncing...</div>
 
-    <!-- Your existing HTML structure remains the same -->
+    <!-- Header Section -->
     <header class="header">
         <div class="brand-content">
             <span class="brand-icon">🍽️</span>
@@ -91,7 +608,7 @@
         <div class="menu-grid" id="menuGrid">
             <div class="loading">
                 <div style="font-size: 2rem; margin-bottom: 15px;">🔄</div>
-                Loading menu...
+                Loading menu from database...
             </div>
         </div>
     </div>
@@ -107,24 +624,24 @@
                 <button class="detail-favorite" id="detailFavorite">🤍</button>
             </div>
             <div class="detail-content">
-                <h1 class="detail-name" id="detailName">Double Beef Cheese Burger</h1>
-                <div class="detail-location" id="detailLocation">Naperville, Illinois</div>
+                <h1 class="detail-name" id="detailName">Food Item</h1>
+                <div class="detail-location" id="detailLocation">Location</div>
                 
                 <div class="nutrition-info">
                     <div class="nutrition-item">
-                        <div class="nutrition-value" id="nutritionCalories">198</div>
+                        <div class="nutrition-value" id="nutritionCalories">0</div>
                         <div class="nutrition-label">kcal</div>
                     </div>
                     <div class="nutrition-item">
-                        <div class="nutrition-value" id="nutritionProteins">23.2</div>
+                        <div class="nutrition-value" id="nutritionProteins">0</div>
                         <div class="nutrition-label">proteins</div>
                     </div>
                     <div class="nutrition-item">
-                        <div class="nutrition-value" id="nutritionFats">13.8</div>
+                        <div class="nutrition-value" id="nutritionFats">0</div>
                         <div class="nutrition-label">fats</div>
                     </div>
                     <div class="nutrition-item">
-                        <div class="nutrition-value" id="nutritionCarbs">23.7</div>
+                        <div class="nutrition-value" id="nutritionCarbs">0</div>
                         <div class="nutrition-label">carbs</div>
                     </div>
                 </div>
@@ -132,14 +649,12 @@
                 <div class="detail-section">
                     <h3>Description</h3>
                     <p class="detail-description" id="detailDescription">
-                        Burger with party filled with macaroni & cheese and real beef. 
-                        Stroganoff sauce, topped with onions, served on a soft black 
-                        steamer burger bar with pany fit.
+                        Food description will appear here.
                     </p>
                 </div>
 
                 <div class="item-price" style="justify-content: center; margin: 20px 0; font-size: 1.6rem;">
-                    ETB 459.00
+                    ETB 0.00
                 </div>
             </div>
         </div>
@@ -149,18 +664,16 @@
     <div class="cart-notification" id="cartNotification">Item added to cart!</div>
 
     <!-- Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js"></script>
     
     <script>
         // ===== SUPABASE CONFIGURATION =====
-        // Replace these with your actual Supabase credentials
-        const SUPABASE_CONFIG = {
-            url: 'https://your-project.supabase.co',
-            anonKey: 'your-anon-key'
-        };
-
-        // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        // REPLACE THESE WITH YOUR ACTUAL SUPABASE CREDENTIALS
+        const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+        const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+        
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ===== APPLICATION STATE =====
         let menuData = [];
@@ -174,16 +687,10 @@
         const detailModal = document.getElementById('detailModal');
         const closeModal = document.getElementById('closeModal');
         const filterBtns = document.querySelectorAll('.filter-btn');
-        const cartNotification = document.getElementById('cartNotification');
         const searchInput = document.getElementById('searchInput');
-        const detailFavorite = document.getElementById('detailFavorite');
-        const detailImage = document.getElementById('detailImage');
-        const detailImagePlaceholder = document.getElementById('detailImagePlaceholder');
         const syncIndicator = document.getElementById('syncIndicator');
 
-        // ===== SUPABASE DATA MANAGEMENT =====
-        
-        // Load menu items from Supabase
+        // ===== SUPABASE FUNCTIONS =====
         async function loadMenuItems() {
             showSyncIndicator('🔄 Loading menu...', 'syncing');
             
@@ -193,9 +700,7 @@
                     .select('*')
                     .order('created_at', { ascending: false });
 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
 
                 menuData = data || [];
                 
@@ -210,62 +715,13 @@
                 
             } catch (error) {
                 console.error('Error loading menu:', error);
-                showSyncIndicator('❌ Failed to load menu', 'error');
+                showSyncIndicator('❌ Database error', 'error');
                 setTimeout(() => hideSyncIndicator(), 3000);
-                
-                // Fallback: Show empty state
                 showEmptyMenuMessage();
             }
         }
 
-        // Set up real-time subscription
-        function setupRealtimeSubscription() {
-            const subscription = supabase
-                .channel('menu-changes')
-                .on(
-                    'postgres_changes',
-                    {
-                        event: '*',
-                        schema: 'public',
-                        table: 'menu_items'
-                    },
-                    (payload) => {
-                        console.log('Real-time update received:', payload);
-                        handleRealtimeUpdate(payload);
-                    }
-                )
-                .subscribe();
-
-            return subscription;
-        }
-
-        // Handle real-time updates
-        function handleRealtimeUpdate(payload) {
-            showSyncIndicator('🔄 Updating menu...', 'syncing');
-            
-            switch (payload.eventType) {
-                case 'INSERT':
-                    menuData.unshift(payload.new);
-                    break;
-                case 'UPDATE':
-                    const updateIndex = menuData.findIndex(item => item.id === payload.new.id);
-                    if (updateIndex !== -1) {
-                        menuData[updateIndex] = payload.new;
-                    }
-                    break;
-                case 'DELETE':
-                    menuData = menuData.filter(item => item.id !== payload.old.id);
-                    break;
-            }
-
-            renderMenuItems(menuData);
-            
-            showSyncIndicator('✅ Menu updated', 'success');
-            setTimeout(() => hideSyncIndicator(), 2000);
-        }
-
-        // ===== UI MANAGEMENT =====
-        
+        // ===== UI FUNCTIONS =====
         function showSyncIndicator(text, type = 'syncing') {
             syncIndicator.textContent = text;
             syncIndicator.className = `sync-indicator ${type}`;
@@ -282,22 +738,14 @@
                     <div style="font-size: 3rem; margin-bottom: 20px;">🍽️</div>
                     <h3 style="margin-bottom: 15px; color: #2d3436;">Welcome to Delicious Bites!</h3>
                     <p style="color: #636e72; margin-bottom: 25px; line-height: 1.6;">
-                        Our digital menu is being prepared.<br>
-                        Delicious items coming soon!
+                        Our menu is being prepared.<br>
+                        Check back soon for delicious items!
                     </p>
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; display: inline-block;">
-                        <strong>Live Menu</strong><br>
-                        <span style="color: #ee5a24;">Updates automatically</span>
-                    </div>
                 </div>
             `;
         }
 
-        // ===== EXISTING FUNCTIONS (UPDATED FOR SUPABASE) =====
-        
-        // Render menu items
         function renderMenuItems(items) {
-            // Clear previous items
             menuGrid.innerHTML = '';
             
             if (items.length === 0) {
@@ -305,7 +753,6 @@
                 return;
             }
             
-            // Use document fragment for better performance
             const fragment = document.createDocumentFragment();
             
             items.forEach(item => {
@@ -326,13 +773,12 @@
                         <h3 class="item-name">${item.name}</h3>
                         <p class="item-description">${item.description}</p>
                         <div class="item-price">
-                            ${formatPrice(item.price)}
+                            ETB ${parseFloat(item.price).toFixed(2)}
                             <button class="view-details" data-id="${item.id}">👀</button>
                         </div>
                     </div>
                 `;
                 
-                // Add event listeners directly
                 menuItem.addEventListener('click', () => openDetailModal(item));
                 
                 const favoriteBtn = menuItem.querySelector('.favorite-btn');
@@ -342,15 +788,6 @@
                     toggleFavorite(itemId);
                 });
                 
-                const viewDetailsBtn = menuItem.querySelector('.view-details');
-                viewDetailsBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const itemId = viewDetailsBtn.getAttribute('data-id');
-                    const item = menuData.find(i => i.id == itemId);
-                    openDetailModal(item);
-                });
-                
-                // Handle image loading for this item
                 const img = menuItem.querySelector('.item-image');
                 const placeholder = menuItem.querySelector('.image-placeholder');
                 
@@ -359,39 +796,25 @@
                     placeholder.classList.add('hidden');
                 });
                 
-                img.addEventListener('error', function() {
-                    console.error(`Failed to load image: ${this.src}`);
-                });
-                
                 fragment.appendChild(menuItem);
             });
             
             menuGrid.appendChild(fragment);
         }
 
-        // Open detail modal
         function openDetailModal(item) {
             currentItem = item;
             const isFavorite = favorites.includes(item.id);
             
             // Reset image state
+            const detailImage = document.getElementById('detailImage');
+            const detailPlaceholder = document.getElementById('detailImagePlaceholder');
             detailImage.classList.remove('loaded');
-            detailImagePlaceholder.classList.remove('hidden');
+            detailPlaceholder.classList.remove('hidden');
             
-            // Set the image source for the detail view
+            // Set content
             detailImage.src = item.image;
             detailImage.alt = item.name;
-            
-            // Handle image loading for detail view
-            detailImage.addEventListener('load', function() {
-                this.classList.add('loaded');
-                detailImagePlaceholder.classList.add('hidden');
-            });
-            
-            detailImage.addEventListener('error', function() {
-                console.error(`Failed to load detail image: ${this.src}`);
-            });
-            
             document.getElementById('detailBadge').textContent = item.badge;
             document.getElementById('detailFavorite').innerHTML = isFavorite ? '❤' : '🤍';
             document.getElementById('detailFavorite').className = `detail-favorite ${isFavorite ? 'active' : ''}`;
@@ -399,7 +822,7 @@
             document.getElementById('detailLocation').textContent = item.location;
             document.getElementById('detailDescription').textContent = item.description;
             
-            // Handle nutrition data (could be JSON string or object)
+            // Handle nutrition data
             let nutrition = item.nutrition;
             if (typeof nutrition === 'string') {
                 try {
@@ -414,37 +837,52 @@
             document.getElementById('nutritionFats').textContent = nutrition.fats || 0;
             document.getElementById('nutritionCarbs').textContent = nutrition.carbs || 0;
             
-            // Update price in modal
-            const priceElement = document.querySelector('.modal-content .item-price');
-            priceElement.textContent = formatPrice(item.price);
+            // Update price
+            document.querySelector('.modal-content .item-price').textContent = `ETB ${parseFloat(item.price).toFixed(2)}`;
             
             detailModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Add event listener to modal favorite button
-            document.getElementById('detailFavorite').addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleFavorite(item.id);
+            // Handle image load
+            detailImage.addEventListener('load', function() {
+                this.classList.add('loaded');
+                detailPlaceholder.classList.add('hidden');
             });
         }
 
-        // Close modal
         function closeDetailModal() {
             detailModal.style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        // Filter menu items
+        function toggleFavorite(itemId) {
+            const index = favorites.indexOf(itemId);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(itemId);
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            updateFavoritesUI();
+        }
+
+        function updateFavoritesUI() {
+            document.querySelectorAll('.favorite-btn').forEach(btn => {
+                const itemId = parseInt(btn.getAttribute('data-id'));
+                const isFavorite = favorites.includes(itemId);
+                btn.className = `favorite-btn ${isFavorite ? 'active' : ''}`;
+                btn.innerHTML = isFavorite ? '❤' : '🤍';
+            });
+        }
+
         function filterMenu(category) {
             currentFilter = category;
             applyFilters();
         }
 
-        // Apply both category filter and search
         function applyFilters() {
             let filteredItems = menuData;
             
-            // Apply category filter
             if (currentFilter !== 'all') {
                 if (currentFilter === 'favorites') {
                     filteredItems = menuData.filter(item => favorites.includes(item.id));
@@ -453,7 +891,6 @@
                 }
             }
             
-            // Apply search filter
             if (currentSearchTerm) {
                 const term = currentSearchTerm.toLowerCase();
                 filteredItems = filteredItems.filter(item => 
@@ -465,76 +902,8 @@
             renderMenuItems(filteredItems);
         }
 
-        // Toggle favorite status
-        function toggleFavorite(itemId) {
-            const index = favorites.indexOf(itemId);
-            
-            if (index > -1) {
-                favorites.splice(index, 1);
-            } else {
-                favorites.push(itemId);
-            }
-            
-            // Save to localStorage
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            
-            // Update UI
-            updateFavoritesUI();
-            
-            // If we're on the favorites filter, update the view
-            if (currentFilter === 'favorites') {
-                applyFilters();
-            }
-        }
-
-        // Update favorites UI
-        function updateFavoritesUI() {
-            // Update all favorite buttons
-            document.querySelectorAll('.favorite-btn').forEach(btn => {
-                const itemId = parseInt(btn.getAttribute('data-id'));
-                const isFavorite = favorites.includes(itemId);
-                
-                if (isFavorite) {
-                    btn.classList.add('active');
-                    btn.innerHTML = '❤';
-                } else {
-                    btn.classList.remove('active');
-                    btn.innerHTML = '🤍';
-                }
-            });
-            
-            // Update modal favorite button if open
-            if (currentItem) {
-                const modalFavorite = document.getElementById('detailFavorite');
-                const isFavorite = favorites.includes(currentItem.id);
-                
-                if (isFavorite) {
-                    modalFavorite.classList.add('active');
-                    modalFavorite.innerHTML = '❤';
-                } else {
-                    modalFavorite.classList.remove('active');
-                    modalFavorite.innerHTML = '🤍';
-                }
-            }
-        }
-
-        // Add to cart function
-        function addToCart(itemId) {
-            // Show notification
-            cartNotification.style.display = 'flex';
-            setTimeout(() => {
-                cartNotification.style.display = 'none';
-            }, 2000);
-        }
-
-        // Format price for Ethiopian currency
-        function formatPrice(price) {
-            return `ETB ${parseFloat(price).toFixed(2)}`;
-        }
-
-        // Setup event listeners
+        // ===== EVENT LISTENERS =====
         function setupEventListeners() {
-            // Filter buttons
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
@@ -543,7 +912,6 @@
                 });
             });
 
-            // Search input with debouncing for performance
             let searchTimeout;
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
@@ -553,43 +921,23 @@
                 }, 300);
             });
 
-            // Close modal
             closeModal.addEventListener('click', closeDetailModal);
             detailModal.addEventListener('click', (e) => {
-                if (e.target === detailModal) {
-                    closeDetailModal();
-                }
+                if (e.target === detailModal) closeDetailModal();
             });
 
-            // Close modal with Escape key
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeDetailModal();
-                }
+                if (e.key === 'Escape') closeDetailModal();
             });
         }
 
         // ===== INITIALIZATION =====
         async function initializeMenu() {
-            try {
-                // Load menu items from Supabase
-                await loadMenuItems();
-                
-                // Set up real-time subscription
-                setupRealtimeSubscription();
-                
-                // Set up UI event listeners
-                setupEventListeners();
-                updateFavoritesUI();
-                
-                console.log('Menu initialized with Supabase');
-            } catch (error) {
-                console.error('Failed to initialize menu:', error);
-                showEmptyMenuMessage();
-            }
+            await loadMenuItems();
+            setupEventListeners();
+            updateFavoritesUI();
         }
 
-        // Start the application
         document.addEventListener('DOMContentLoaded', initializeMenu);
     </script>
 </body>
