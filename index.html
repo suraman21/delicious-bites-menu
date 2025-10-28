@@ -3,8 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delicious Bites - Digital Menu</title>
+    <title>Arkeon Ethiopia - Digital Menu</title>
     <style>
+        /* ===== PRELOADER STYLES ===== */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-logo {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .preloader-brand {
+            color: white;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-align: center;
+            animation: fadeIn 1s ease;
+        }
+
+        .preloader-tagline {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: 40px;
+            animation: fadeIn 1.2s ease;
+        }
+
+        .preloader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .preloader-progress {
+            margin-top: 25px;
+            width: 200px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .preloader-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* ===== MAIN STYLES ===== */
         * {
             margin: 0;
@@ -17,34 +108,50 @@
             background-color: #f8f9fa;
             color: #333;
             padding-bottom: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.loaded {
+            opacity: 1;
         }
 
         /* Header & Branding */
         .header {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
             color: white;
-            padding: 20px 15px;
+            padding: 25px 15px;
             margin: 10px;
             border-radius: 15px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         .brand-name {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
             margin-bottom: 5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .brand-tagline {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-size: 0.95rem;
+            opacity: 0.95;
+            font-weight: 500;
         }
 
         .brand-icon {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
+            font-size: 2rem;
+            margin-bottom: 10px;
             display: block;
+            animation: rotate 3s ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
         }
 
         /* Search Section */
@@ -75,12 +182,14 @@
             border: none;
             border-radius: 50px;
             font-size: 0.95rem;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
         #searchInput:focus {
             outline: none;
-            box-shadow: 0 2px 8px rgba(238, 90, 36, 0.2);
+            box-shadow: 0 3px 12px rgba(42, 82, 152, 0.25);
+            transform: translateY(-2px);
         }
 
         /* Category Filter */
@@ -90,7 +199,7 @@
         }
 
         .section-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 700;
             margin-bottom: 12px;
             color: #2d3436;
@@ -102,7 +211,8 @@
         .section-title::before {
             content: "≡";
             margin-right: 8px;
-            color: #ee5a24;
+            color: #2a5298;
+            font-size: 1.3rem;
         }
 
         .category-filter {
@@ -110,6 +220,7 @@
             overflow-x: auto;
             white-space: nowrap;
             scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
 
         .category-filter::-webkit-scrollbar {
@@ -122,20 +233,26 @@
             padding: 10px 18px;
             margin-right: 10px;
             background: white;
-            border: none;
+            border: 2px solid transparent;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             font-weight: 600;
             font-size: 0.9rem;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             color: #555;
         }
 
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
         .filter-btn.active {
-            background: #ee5a24;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
             color: white;
-            box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
+            box-shadow: 0 4px 15px rgba(42, 82, 152, 0.4);
+            border-color: #2a5298;
         }
 
         /* Menu Grid */
@@ -150,6 +267,7 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin-top: 8px;
+            min-height: 200px;
         }
 
         .menu-item {
@@ -158,7 +276,24 @@
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
         }
 
         .menu-item:active {
@@ -167,7 +302,7 @@
 
         .item-image-container {
             width: 100%;
-            height: 120px;
+            height: 130px;
             position: relative;
             overflow: hidden;
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
@@ -198,52 +333,61 @@
             align-items: center;
             justify-content: center;
             color: #adb5bd;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
             transition: opacity 0.3s ease;
         }
 
         .image-placeholder.hidden {
             opacity: 0;
+            pointer-events: none;
         }
 
         .menu-item:hover .item-image {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
         .item-badge {
             position: absolute;
             top: 8px;
             left: 8px;
-            background: #ee5a24;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
             color: white;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
-            font-size: 0.65rem;
-            font-weight: 600;
+            font-size: 0.7rem;
+            font-weight: 700;
             z-index: 2;
+            box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
         }
 
         .favorite-btn {
             position: absolute;
             top: 8px;
             right: 8px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: #ccc;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             z-index: 2;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.1);
         }
 
         .favorite-btn.active {
             color: #ff4757;
+            background: rgba(255, 255, 255, 1);
         }
 
         .item-content {
@@ -253,52 +397,78 @@
         .item-name {
             font-size: 1rem;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: #2d3436;
+            line-height: 1.3;
         }
 
         .item-description {
             color: #636e72;
             font-size: 0.75rem;
-            margin-bottom: 8px;
-            line-height: 1.3;
+            margin-bottom: 10px;
+            line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 2rem;
+            min-height: 2.1rem;
         }
 
         .item-price {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 800;
-            color: #ee5a24;
+            color: #2a5298;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .view-details {
-            background: #ee5a24;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(42, 82, 152, 0.3);
         }
 
-        /* Loading State */
-        .loading {
-            text-align: center;
-            padding: 30px;
-            font-size: 1rem;
-            color: #636e72;
+        .view-details:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
             grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #636e72;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+
+        .empty-state p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
         /* Modal */
@@ -309,25 +479,27 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.85);
             z-index: 1000;
             padding: 10px;
+            overflow-y: auto;
         }
 
         .modal-content {
             background: white;
-            margin: 0 auto;
+            margin: 20px auto;
             border-radius: 20px;
             max-width: 500px;
             position: relative;
-            animation: slideUp 0.3s ease;
+            animation: slideUp 0.4s ease;
             overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(50px);
             }
             to {
                 opacity: 1;
@@ -337,22 +509,31 @@
 
         .close-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.6);
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.7);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            font-size: 1.1rem;
+            width: 42px;
+            height: 42px;
+            font-size: 1.2rem;
             cursor: pointer;
             z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(0,0,0,0.9);
+            transform: rotate(90deg);
         }
 
         .detail-image-container {
             width: 100%;
-            height: 250px;
+            height: 280px;
             position: relative;
             overflow: hidden;
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
@@ -363,6 +544,7 @@
             height: 100%;
             object-fit: cover;
             opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .detail-image.loaded {
@@ -381,6 +563,7 @@
             color: #adb5bd;
             font-size: 1.1rem;
             background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            transition: opacity 0.3s ease;
         }
 
         .detail-image-placeholder.hidden {
@@ -389,33 +572,40 @@
 
         .detail-badge {
             position: absolute;
-            top: 12px;
-            left: 12px;
-            background: #ee5a24;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
             color: white;
-            padding: 5px 12px;
+            padding: 6px 14px;
             border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 0.85rem;
+            font-weight: 700;
             z-index: 2;
+            box-shadow: 0 3px 10px rgba(238, 90, 36, 0.4);
         }
 
         .detail-favorite {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(255, 255, 255, 0.9);
+            bottom: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.95);
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             color: #ccc;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             z-index: 2;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+        }
+
+        .detail-favorite:hover {
+            transform: scale(1.1);
         }
 
         .detail-favorite.active {
@@ -423,37 +613,38 @@
         }
 
         .detail-content {
-            padding: 20px;
+            padding: 25px;
         }
 
         .detail-name {
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             font-weight: 800;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             color: #2d3436;
+            line-height: 1.3;
         }
 
         .detail-location {
             color: #636e72;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
         }
 
         .detail-location::before {
             content: "📍";
-            margin-right: 6px;
+            margin-right: 8px;
         }
 
         .nutrition-info {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            gap: 15px;
             margin: 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
         }
 
         .nutrition-item {
@@ -461,26 +652,27 @@
         }
 
         .nutrition-value {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: 800;
-            color: #ee5a24;
+            color: #2a5298;
         }
 
         .nutrition-label {
             font-size: 0.75rem;
             color: #636e72;
-            margin-top: 4px;
+            margin-top: 5px;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
         .detail-section {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .detail-section h3 {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #2d3436;
             display: flex;
             align-items: center;
@@ -488,40 +680,57 @@
 
         .detail-section h3::before {
             content: "📝";
-            margin-right: 8px;
+            margin-right: 10px;
         }
 
         .detail-description {
             color: #2d3436;
-            line-height: 1.6;
+            line-height: 1.7;
             font-size: 0.95rem;
         }
 
+        .detail-price-section {
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            color: white;
+            padding: 20px;
+            margin: 25px -25px -25px;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        /* Cart Notification */
         .cart-notification {
             position: fixed;
-            bottom: 15px;
-            right: 15px;
-            background: #ee5a24;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #27ae60, #219a52);
             color: white;
-            padding: 12px 16px;
+            padding: 14px 20px;
             border-radius: 50px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             display: none;
             align-items: center;
             z-index: 999;
             font-weight: 600;
-            animation: fadeIn 0.2s ease;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .cart-notification::before {
             content: "✓";
-            margin-right: 6px;
-            font-size: 1.1rem;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-right: 8px;
+            font-size: 1.2rem;
         }
 
         /* Sync Indicator */
@@ -529,15 +738,16 @@
             position: fixed;
             top: 10px;
             right: 10px;
-            background: #ee5a24;
+            background: #2a5298;
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 0.85rem;
             font-weight: 600;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
             display: none;
+            animation: fadeIn 0.3s ease;
         }
 
         .sync-indicator.syncing {
@@ -556,18 +766,45 @@
         @media (min-width: 768px) {
             .menu-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 16px;
+                gap: 18px;
             }
+            
             .item-image-container {
-                height: 140px;
+                height: 160px;
             }
+            
             .detail-image-container {
-                height: 300px;
+                height: 350px;
+            }
+
+            .brand-name {
+                font-size: 2.5rem;
+            }
+
+            .preloader-brand {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .menu-grid {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">🍽️</div>
+        <div class="preloader-brand">ARKEON ETHIOPIA</div>
+        <div class="preloader-tagline">Crafting Culinary Excellence</div>
+        <div class="preloader-spinner"></div>
+        <div class="preloader-progress">
+            <div class="preloader-progress-bar" id="progressBar"></div>
+        </div>
+    </div>
+
     <!-- Sync Indicator -->
     <div class="sync-indicator" id="syncIndicator">🔄 Syncing...</div>
 
@@ -575,15 +812,15 @@
     <header class="header">
         <div class="brand-content">
             <span class="brand-icon">🍽️</span>
-            <div class="brand-name">DELICIOUS BITES</div>
-            <div class="brand-tagline">Serving Happiness Since 2010</div>
+            <div class="brand-name">Arkeon Ethiopia</div>
+            <div class="brand-tagline">Crafting Culinary Excellence Since 2010</div>
         </div>
     </header>
 
     <!-- Search Section -->
     <div class="search-section">
         <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search menu items...">
+            <input type="text" id="searchInput" placeholder="Search for delicious dishes...">
         </div>
     </div>
 
@@ -605,12 +842,7 @@
     <!-- Menu Grid -->
     <div class="menu-container">
         <div class="section-title">Our Menu</div>
-        <div class="menu-grid" id="menuGrid">
-            <div class="loading">
-                <div style="font-size: 2rem; margin-bottom: 15px;">🔄</div>
-                Loading menu from database...
-            </div>
-        </div>
+        <div class="menu-grid" id="menuGrid"></div>
     </div>
 
     <!-- Detail Modal -->
@@ -634,7 +866,7 @@
                     </div>
                     <div class="nutrition-item">
                         <div class="nutrition-value" id="nutritionProteins">0</div>
-                        <div class="nutrition-label">proteins</div>
+                        <div class="nutrition-label">protein</div>
                     </div>
                     <div class="nutrition-item">
                         <div class="nutrition-value" id="nutritionFats">0</div>
@@ -653,7 +885,7 @@
                     </p>
                 </div>
 
-                <div class="item-price" style="justify-content: center; margin: 20px 0; font-size: 1.6rem;">
+                <div class="detail-price-section" id="detailPrice">
                     ETB 0.00
                 </div>
             </div>
@@ -667,12 +899,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js"></script>
     
     <script>
-      // ===== SUPABASE CONFIGURATION =====
-const SUPABASE_URL = 'https://umupbrhhjjnbkscyacmn.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtdXBicmhoampuYmtzY3lhY21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1NzcwNTAsImV4cCI6MjA3NzE1MzA1MH0.lxMiEsGgK9VpUzcrjUSaw6ZvLK7uOtTz4S2_fSnJWOM';
+        // ===== SUPABASE CONFIGURATION =====
+        const SUPABASE_URL = 'https://umupbrhhjjnbkscyacmn.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtdXBicmhoampuYmtzY3lhY21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1NzcwNTAsImV4cCI6MjA3NzE1MzA1MH0.lxMiEsGgK9VpUzcrjUSaw6ZvLK7uOtTz4S2_fSnJWOM';
 
-// Initialize Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Initialize Supabase
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ===== APPLICATION STATE =====
         let menuData = [];
@@ -680,18 +912,36 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let currentSearchTerm = '';
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         let currentItem = null;
+        let preloaderProgress = 0;
 
         // DOM Elements
+        const preloader = document.getElementById('preloader');
+        const progressBar = document.getElementById('progressBar');
         const menuGrid = document.getElementById('menuGrid');
         const detailModal = document.getElementById('detailModal');
         const closeModal = document.getElementById('closeModal');
         const filterBtns = document.querySelectorAll('.filter-btn');
         const searchInput = document.getElementById('searchInput');
         const syncIndicator = document.getElementById('syncIndicator');
+        const detailFavoriteBtn = document.getElementById('detailFavorite');
+
+        // ===== PRELOADER FUNCTIONS =====
+        function updatePreloaderProgress(percent) {
+            preloaderProgress = Math.min(percent, 100);
+            progressBar.style.width = preloaderProgress + '%';
+        }
+
+        function hidePreloader() {
+            updatePreloaderProgress(100);
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+                document.body.classList.add('loaded');
+            }, 300);
+        }
 
         // ===== SUPABASE FUNCTIONS =====
         async function loadMenuItems() {
-            showSyncIndicator('🔄 Loading menu...', 'syncing');
+            updatePreloaderProgress(20);
             
             try {
                 const { data, error } = await supabase
@@ -699,24 +949,39 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                     .select('*')
                     .order('created_at', { ascending: false });
 
+                updatePreloaderProgress(50);
+
                 if (error) throw error;
 
                 menuData = data || [];
                 
-                if (menuData.length === 0) {
-                    showEmptyMenuMessage();
-                } else {
-                    renderMenuItems(menuData);
-                }
+                updatePreloaderProgress(70);
                 
-                showSyncIndicator('✅ Menu loaded', 'success');
-                setTimeout(() => hideSyncIndicator(), 2000);
+                // Show first batch immediately (70% ready)
+                if (menuData.length > 0) {
+                    const firstBatch = menuData.slice(0, Math.ceil(menuData.length * 0.7));
+                    renderMenuItems(firstBatch, false);
+                    
+                    // Hide preloader at 70%
+                    hidePreloader();
+                    
+                    // Load remaining items in background
+                    setTimeout(() => {
+                        const remainingItems = menuData.slice(Math.ceil(menuData.length * 0.7));
+                        if (remainingItems.length > 0) {
+                            appendMenuItems(remainingItems);
+                        }
+                        updatePreloaderProgress(100);
+                    }, 500);
+                } else {
+                    showEmptyState();
+                    hidePreloader();
+                }
                 
             } catch (error) {
                 console.error('Error loading menu:', error);
-                showSyncIndicator('❌ Database error', 'error');
-                setTimeout(() => hideSyncIndicator(), 3000);
-                showEmptyMenuMessage();
+                showEmptyState();
+                hidePreloader();
             }
         }
 
@@ -731,74 +996,104 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             syncIndicator.style.display = 'none';
         }
 
-        function showEmptyMenuMessage() {
+        function showEmptyState() {
             menuGrid.innerHTML = `
-                <div class="loading" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
-                    <div style="font-size: 3rem; margin-bottom: 20px;">🍽️</div>
-                    <h3 style="margin-bottom: 15px; color: #2d3436;">Welcome to Delicious Bites!</h3>
-                    <p style="color: #636e72; margin-bottom: 25px; line-height: 1.6;">
-                        Our menu is being prepared.<br>
-                        Check back soon for delicious items!
-                    </p>
+                <div class="empty-state">
+                    <div class="empty-state-icon">🍽️</div>
+                    <h3>Welcome to Arkeon Ethiopia!</h3>
+                    <p>Our culinary masterpieces are being prepared.<br>Check back soon for an extraordinary dining experience!</p>
                 </div>
             `;
         }
 
-        function renderMenuItems(items) {
-            menuGrid.innerHTML = '';
+        function renderMenuItems(items, clearFirst = true) {
+            if (clearFirst) {
+                menuGrid.innerHTML = '';
+            }
             
-            if (items.length === 0) {
-                showEmptyMenuMessage();
+            if (items.length === 0 && clearFirst) {
+                showEmptyState();
                 return;
             }
             
             const fragment = document.createDocumentFragment();
             
-            items.forEach(item => {
-                const isFavorite = favorites.includes(item.id);
-                const menuItem = document.createElement('div');
-                menuItem.className = 'menu-item';
-                
-                menuItem.innerHTML = `
-                    <div class="item-image-container">
-                        <img class="item-image" src="${item.image}" alt="${item.name}" loading="lazy">
-                        <div class="image-placeholder">Loading image...</div>
-                        <div class="item-badge">${item.badge}</div>
-                        <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${item.id}">
-                            ${isFavorite ? '❤' : '🤍'}
-                        </button>
-                    </div>
-                    <div class="item-content">
-                        <h3 class="item-name">${item.name}</h3>
-                        <p class="item-description">${item.description}</p>
-                        <div class="item-price">
-                            ETB ${parseFloat(item.price).toFixed(2)}
-                            <button class="view-details" data-id="${item.id}">👀</button>
-                        </div>
-                    </div>
-                `;
-                
-                menuItem.addEventListener('click', () => openDetailModal(item));
-                
-                const favoriteBtn = menuItem.querySelector('.favorite-btn');
-                favoriteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const itemId = parseInt(favoriteBtn.getAttribute('data-id'));
-                    toggleFavorite(itemId);
-                });
-                
-                const img = menuItem.querySelector('.item-image');
-                const placeholder = menuItem.querySelector('.image-placeholder');
-                
-                img.addEventListener('load', function() {
-                    this.classList.add('loaded');
-                    placeholder.classList.add('hidden');
-                });
-                
+            items.forEach((item, index) => {
+                const menuItem = createMenuItem(item, index);
                 fragment.appendChild(menuItem);
             });
             
             menuGrid.appendChild(fragment);
+        }
+
+        function appendMenuItems(items) {
+            const fragment = document.createDocumentFragment();
+            const currentItemCount = menuGrid.querySelectorAll('.menu-item').length;
+            
+            items.forEach((item, index) => {
+                const menuItem = createMenuItem(item, currentItemCount + index);
+                fragment.appendChild(menuItem);
+            });
+            
+            menuGrid.appendChild(fragment);
+        }
+
+        function createMenuItem(item, index) {
+            const isFavorite = favorites.includes(item.id);
+            const menuItem = document.createElement('div');
+            menuItem.className = 'menu-item';
+            menuItem.style.animationDelay = `${index * 0.05}s`;
+            
+            menuItem.innerHTML = `
+                <div class="item-image-container">
+                    <img class="item-image" src="${item.image}" alt="${item.name}" loading="lazy">
+                    <div class="image-placeholder">🖼️</div>
+                    <div class="item-badge">${item.badge}</div>
+                    <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${item.id}">
+                        ${isFavorite ? '❤' : '🤍'}
+                    </button>
+                </div>
+                <div class="item-content">
+                    <h3 class="item-name">${item.name}</h3>
+                    <p class="item-description">${item.description}</p>
+                    <div class="item-price">
+                        ETB ${parseFloat(item.price).toFixed(2)}
+                        <button class="view-details" data-id="${item.id}">👁️</button>
+                    </div>
+                </div>
+            `;
+            
+            menuItem.addEventListener('click', (e) => {
+                if (!e.target.closest('.favorite-btn') && !e.target.closest('.view-details')) {
+                    openDetailModal(item);
+                }
+            });
+            
+            const favoriteBtn = menuItem.querySelector('.favorite-btn');
+            favoriteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleFavorite(item.id);
+            });
+            
+            const viewBtn = menuItem.querySelector('.view-details');
+            viewBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openDetailModal(item);
+            });
+            
+            const img = menuItem.querySelector('.item-image');
+            const placeholder = menuItem.querySelector('.image-placeholder');
+            
+            img.addEventListener('load', function() {
+                this.classList.add('loaded');
+                placeholder.classList.add('hidden');
+            });
+            
+            img.addEventListener('error', function() {
+                placeholder.innerHTML = '🍽️';
+            });
+            
+            return menuItem;
         }
 
         function openDetailModal(item) {
@@ -815,8 +1110,8 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             detailImage.src = item.image;
             detailImage.alt = item.name;
             document.getElementById('detailBadge').textContent = item.badge;
-            document.getElementById('detailFavorite').innerHTML = isFavorite ? '❤' : '🤍';
-            document.getElementById('detailFavorite').className = `detail-favorite ${isFavorite ? 'active' : ''}`;
+            detailFavoriteBtn.innerHTML = isFavorite ? '❤' : '🤍';
+            detailFavoriteBtn.className = `detail-favorite ${isFavorite ? 'active' : ''}`;
             document.getElementById('detailName').textContent = item.name;
             document.getElementById('detailLocation').textContent = item.location;
             document.getElementById('detailDescription').textContent = item.description;
@@ -837,7 +1132,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             document.getElementById('nutritionCarbs').textContent = nutrition.carbs || 0;
             
             // Update price
-            document.querySelector('.modal-content .item-price').textContent = `ETB ${parseFloat(item.price).toFixed(2)}`;
+            document.getElementById('detailPrice').textContent = `ETB ${parseFloat(item.price).toFixed(2)}`;
             
             detailModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -846,6 +1141,10 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             detailImage.addEventListener('load', function() {
                 this.classList.add('loaded');
                 detailPlaceholder.classList.add('hidden');
+            });
+
+            detailImage.addEventListener('error', function() {
+                detailPlaceholder.innerHTML = '🍽️';
             });
         }
 
@@ -862,7 +1161,13 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 favorites.push(itemId);
             }
             localStorage.setItem('favorites', JSON.stringify(favorites));
-            updateFavoritesUI();
+            
+            // If on favorites filter, refresh the view
+            if (currentFilter === 'favorites') {
+                applyFilters();
+            } else {
+                updateFavoritesUI();
+            }
         }
 
         function updateFavoritesUI() {
@@ -872,6 +1177,13 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 btn.className = `favorite-btn ${isFavorite ? 'active' : ''}`;
                 btn.innerHTML = isFavorite ? '❤' : '🤍';
             });
+
+            // Update detail modal favorite button if open
+            if (currentItem) {
+                const isFavorite = favorites.includes(currentItem.id);
+                detailFavoriteBtn.innerHTML = isFavorite ? '❤' : '🤍';
+                detailFavoriteBtn.className = `detail-favorite ${isFavorite ? 'active' : ''}`;
+            }
         }
 
         function filterMenu(category) {
@@ -903,6 +1215,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ===== EVENT LISTENERS =====
         function setupEventListeners() {
+            // Filter buttons
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
@@ -911,6 +1224,7 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 });
             });
 
+            // Search
             let searchTimeout;
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
@@ -920,25 +1234,40 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
                 }, 300);
             });
 
+            // Modal close
             closeModal.addEventListener('click', closeDetailModal);
+            
             detailModal.addEventListener('click', (e) => {
                 if (e.target === detailModal) closeDetailModal();
             });
 
+            // Detail favorite button
+            detailFavoriteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (currentItem) {
+                    toggleFavorite(currentItem.id);
+                }
+            });
+
+            // Keyboard
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeDetailModal();
             });
         }
 
         // ===== INITIALIZATION =====
-        async function initializeMenu() {
-            await loadMenuItems();
+        async function initializeApp() {
+            updatePreloaderProgress(10);
+            
             setupEventListeners();
+            
+            await loadMenuItems();
+            
             updateFavoritesUI();
         }
 
-        document.addEventListener('DOMContentLoaded', initializeMenu);
+        // Start app when DOM is ready
+        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
-
