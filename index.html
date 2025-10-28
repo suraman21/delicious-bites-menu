@@ -12,13 +12,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #feca57 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
         }
 
         .preloader.hidden {
@@ -27,40 +27,69 @@
         }
 
         .preloader-logo {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: bounce 1.5s ease-in-out infinite;
+            font-size: 5rem;
+            margin-bottom: 25px;
+            animation: float 2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
         }
 
-        .preloader-brand {
+        .preloader-restaurant {
             color: white;
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-            text-align: center;
-            animation: fadeIn 1s ease;
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .preloader-restaurant span {
+            display: inline-block;
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .preloader-restaurant span:nth-child(1) { animation-delay: 0.1s; }
+        .preloader-restaurant span:nth-child(2) { animation-delay: 0.2s; }
+        .preloader-restaurant span:nth-child(3) { animation-delay: 0.3s; }
+        .preloader-restaurant span:nth-child(4) { animation-delay: 0.4s; }
+        .preloader-restaurant span:nth-child(5) { animation-delay: 0.5s; }
+        .preloader-restaurant span:nth-child(6) { animation-delay: 0.6s; }
+        .preloader-restaurant span:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .preloader-tagline {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1rem;
-            margin-bottom: 40px;
-            animation: fadeIn 1.2s ease;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+            animation: fadeIn 1s ease 0.8s forwards;
+            opacity: 0;
         }
 
         .preloader-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(255, 255, 255, 0.2);
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
             border-top: 4px solid white;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
@@ -68,32 +97,9 @@
             100% { transform: rotate(360deg); }
         }
 
-        .preloader-progress {
-            margin-top: 25px;
-            width: 200px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .preloader-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #ee5a24);
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.3s ease;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* ===== MAIN STYLES ===== */
@@ -105,11 +111,12 @@
         }
 
         body {
-            background-color: #f8f9fa;
+            background: linear-gradient(to bottom, #fff5e6 0%, #ffe4cc 100%);
             color: #333;
             padding-bottom: 20px;
             opacity: 0;
             transition: opacity 0.5s ease;
+            min-height: 100vh;
         }
 
         body.loaded {
@@ -118,105 +125,133 @@
 
         /* Header & Branding */
         .header {
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
-            padding: 25px 15px;
-            margin: 10px;
-            border-radius: 15px;
+            padding: 30px 20px;
+            margin: 15px 15px 20px;
+            border-radius: 25px;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .brand-name {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .brand-tagline {
-            font-size: 0.95rem;
-            opacity: 0.95;
-            font-weight: 500;
-        }
-
-        .brand-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            display: block;
-            animation: rotate 3s ease-in-out infinite;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
         }
 
         @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .brand-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-name {
+            font-size: 2.3rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .brand-tagline {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 500;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .brand-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+            animation: swing 3s ease-in-out infinite;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+        }
+
+        @keyframes swing {
             0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-10deg); }
-            75% { transform: rotate(10deg); }
+            25% { transform: rotate(-15deg); }
+            75% { transform: rotate(15deg); }
         }
 
         /* Search Section */
         .search-section {
-            padding: 0 10px;
-            margin: 15px 0;
+            padding: 0 15px;
+            margin: 20px 0;
         }
 
         .search-container {
             position: relative;
-            max-width: 500px;
+            max-width: 550px;
             margin: 0 auto;
         }
 
         .search-container::before {
             content: "🔍";
             position: absolute;
-            left: 15px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
-            color: #636e72;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            z-index: 1;
         }
 
         #searchInput {
             width: 100%;
-            padding: 14px 15px 14px 45px;
+            padding: 16px 20px 16px 50px;
             border: none;
             border-radius: 50px;
-            font-size: 0.95rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 1rem;
+            background: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.15);
             transition: all 0.3s ease;
         }
 
         #searchInput:focus {
             outline: none;
-            box-shadow: 0 3px 12px rgba(42, 82, 152, 0.25);
+            box-shadow: 0 6px 25px rgba(255, 107, 107, 0.25);
             transform: translateY(-2px);
         }
 
         /* Category Filter */
         .category-section {
-            padding: 0 10px;
-            margin: 15px 0;
+            padding: 0 15px;
+            margin: 20px 0;
         }
 
         .section-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #2d3436;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #ff6b6b;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .section-title::before {
-            content: "≡";
-            margin-right: 8px;
-            color: #2a5298;
-            font-size: 1.3rem;
+            content: "🍴";
+            margin-right: 10px;
+            font-size: 1.5rem;
         }
 
         .category-filter {
-            padding: 12px 0;
+            padding: 15px 0;
             overflow-x: auto;
             white-space: nowrap;
             scrollbar-width: none;
@@ -230,34 +265,35 @@
         .filter-btn {
             display: inline-flex;
             align-items: center;
-            padding: 10px 18px;
-            margin-right: 10px;
+            padding: 12px 22px;
+            margin-right: 12px;
             background: white;
-            border: 2px solid transparent;
+            border: 3px solid transparent;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.9rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-weight: 700;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             color: #555;
         }
 
         .filter-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
         }
 
         .filter-btn.active {
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
-            box-shadow: 0 4px 15px rgba(42, 82, 152, 0.4);
-            border-color: #2a5298;
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            border-color: #ff6b6b;
+            transform: scale(1.05);
         }
 
         /* Menu Grid */
         .menu-container {
-            padding: 0 10px;
+            padding: 0 15px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -265,47 +301,49 @@
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 8px;
+            gap: 15px;
+            margin-top: 10px;
             min-height: 200px;
         }
 
         .menu-item {
             background: white;
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.15);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             animation: fadeInUp 0.5s ease;
+            border: 3px solid transparent;
         }
 
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px) scale(0.9);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
         .menu-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            transform: translateY(-8px) rotate(-1deg);
+            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.3);
+            border-color: #ff6b6b;
         }
 
         .menu-item:active {
-            transform: scale(0.98);
+            transform: scale(0.95);
         }
 
         .item-image-container {
             width: 100%;
-            height: 130px;
+            height: 140px;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -315,7 +353,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: all 0.4s ease;
             opacity: 0;
         }
 
@@ -332,9 +370,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #adb5bd;
-            font-size: 0.85rem;
-            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
             transition: opacity 0.3s ease;
         }
 
@@ -344,59 +381,68 @@
         }
 
         .menu-item:hover .item-image {
-            transform: scale(1.08);
+            transform: scale(1.15) rotate(2deg);
         }
 
         .item-badge {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
             color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
+            padding: 5px 12px;
+            border-radius: 20px;
             font-size: 0.7rem;
-            font-weight: 700;
+            font-weight: 800;
             z-index: 2;
-            box-shadow: 0 2px 8px rgba(238, 90, 36, 0.3);
+            box-shadow: 0 3px 10px rgba(255, 82, 82, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .favorite-btn {
             position: absolute;
-            top: 8px;
-            right: 8px;
+            top: 10px;
+            right: 10px;
             background: rgba(255, 255, 255, 0.95);
             border: none;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: #ccc;
-            font-size: 0.9rem;
+            font-size: 1rem;
             z-index: 2;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
         }
 
         .favorite-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.2) rotate(10deg);
         }
 
         .favorite-btn.active {
             color: #ff4757;
-            background: rgba(255, 255, 255, 1);
+            background: white;
+            animation: heartbeat 0.6s ease;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1.1); }
         }
 
         .item-content {
-            padding: 12px;
+            padding: 15px;
+            background: white;
         }
 
         .item-name {
-            font-size: 1rem;
-            font-weight: 700;
+            font-size: 1.05rem;
+            font-weight: 800;
             margin-bottom: 6px;
             color: #2d3436;
             line-height: 1.3;
@@ -404,44 +450,47 @@
 
         .item-description {
             color: #636e72;
-            font-size: 0.75rem;
-            margin-bottom: 10px;
+            font-size: 0.8rem;
+            margin-bottom: 12px;
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            min-height: 2.1rem;
+            min-height: 2.2rem;
         }
 
         .item-price {
-            font-size: 1.15rem;
-            font-weight: 800;
-            color: #2a5298;
+            font-size: 1.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .view-details {
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 32px;
-            height: 32px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 8px rgba(42, 82, 152, 0.3);
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
         }
 
         .view-details:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.4);
+            transform: scale(1.15) rotate(15deg);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.5);
         }
 
         /* Empty State */
@@ -450,25 +499,31 @@
             text-align: center;
             padding: 60px 20px;
             color: #636e72;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.1);
         }
 
         .empty-state-icon {
-            font-size: 4rem;
+            font-size: 5rem;
             margin-bottom: 20px;
-            opacity: 0.5;
+            opacity: 0.7;
+            animation: bounce 2s ease-in-out infinite;
         }
 
         .empty-state h3 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
-            color: #2d3436;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: #ff6b6b;
+            font-weight: 800;
         }
 
         .empty-state p {
-            font-size: 0.95rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.7;
             max-width: 400px;
             margin: 0 auto;
+            color: #636e72;
         }
 
         /* Modal */
@@ -483,27 +538,28 @@
             z-index: 1000;
             padding: 10px;
             overflow-y: auto;
+            backdrop-filter: blur(5px);
         }
 
         .modal-content {
             background: white;
             margin: 20px auto;
-            border-radius: 20px;
-            max-width: 500px;
+            border-radius: 25px;
+            max-width: 550px;
             position: relative;
-            animation: slideUp 0.4s ease;
+            animation: modalSlideUp 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
         }
 
-        @keyframes slideUp {
+        @keyframes modalSlideUp {
             from {
                 opacity: 0;
-                transform: translateY(50px);
+                transform: translateY(100px) scale(0.8);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
@@ -511,32 +567,33 @@
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.8);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 42px;
-            height: 42px;
-            font-size: 1.2rem;
+            width: 45px;
+            height: 45px;
+            font-size: 1.3rem;
             cursor: pointer;
             z-index: 10;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
         .close-btn:hover {
-            background: rgba(0,0,0,0.9);
-            transform: rotate(90deg);
+            background: #ff4757;
+            transform: rotate(90deg) scale(1.1);
         }
 
         .detail-image-container {
             width: 100%;
-            height: 280px;
+            height: 300px;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
         }
 
         .detail-image {
@@ -560,9 +617,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #adb5bd;
-            font-size: 1.1rem;
-            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            font-size: 4rem;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
             transition: opacity 0.3s ease;
         }
 
@@ -572,40 +628,40 @@
 
         .detail-badge {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
             color: white;
-            padding: 6px 14px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 800;
             z-index: 2;
-            box-shadow: 0 3px 10px rgba(238, 90, 36, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 82, 82, 0.5);
+            text-transform: uppercase;
         }
 
         .detail-favorite {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
+            bottom: 20px;
+            right: 20px;
             background: rgba(255, 255, 255, 0.95);
             border: none;
             border-radius: 50%;
-            width: 45px;
-            height: 45px;
+            width: 50px;
+            height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: #ccc;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             z-index: 2;
-            transition: all 0.3s ease;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         .detail-favorite:hover {
-            transform: scale(1.1);
+            transform: scale(1.2) rotate(10deg);
         }
 
         .detail-favorite.active {
@@ -617,34 +673,37 @@
         }
 
         .detail-name {
-            font-size: 1.7rem;
-            font-weight: 800;
-            margin-bottom: 8px;
+            font-size: 1.9rem;
+            font-weight: 900;
+            margin-bottom: 10px;
             color: #2d3436;
             line-height: 1.3;
         }
 
         .detail-location {
-            color: #636e72;
+            color: #ff6b6b;
             margin-bottom: 20px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             display: flex;
             align-items: center;
+            font-weight: 600;
         }
 
         .detail-location::before {
             content: "📍";
             margin-right: 8px;
+            font-size: 1.2rem;
         }
 
         .nutrition-info {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 15px;
-            margin: 20px 0;
+            margin: 25px 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 15px;
+            background: linear-gradient(135deg, #fff5e6, #ffe4cc);
+            border-radius: 20px;
+            box-shadow: inset 0 2px 10px rgba(255, 107, 107, 0.1);
         }
 
         .nutrition-item {
@@ -652,17 +711,21 @@
         }
 
         .nutrition-value {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: #2a5298;
+            font-size: 1.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .nutrition-label {
             font-size: 0.75rem;
             color: #636e72;
             margin-top: 5px;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .detail-section {
@@ -670,10 +733,10 @@
         }
 
         .detail-section h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.3rem;
+            font-weight: 800;
             margin-bottom: 12px;
-            color: #2d3436;
+            color: #ff6b6b;
             display: flex;
             align-items: center;
         }
@@ -681,45 +744,47 @@
         .detail-section h3::before {
             content: "📝";
             margin-right: 10px;
+            font-size: 1.4rem;
         }
 
         .detail-description {
             color: #2d3436;
-            line-height: 1.7;
-            font-size: 0.95rem;
+            line-height: 1.8;
+            font-size: 1rem;
         }
 
         .detail-price-section {
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
-            padding: 20px;
-            margin: 25px -25px -25px;
+            padding: 25px;
+            margin: 30px -25px -25px;
             text-align: center;
-            font-size: 1.8rem;
-            font-weight: 800;
+            font-size: 2rem;
+            font-weight: 900;
+            box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.3);
         }
 
         /* Cart Notification */
         .cart-notification {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #27ae60, #219a52);
+            bottom: 25px;
+            right: 25px;
+            background: linear-gradient(135deg, #00b894, #00cec9);
             color: white;
-            padding: 14px 20px;
+            padding: 16px 24px;
             border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
             display: none;
             align-items: center;
             z-index: 999;
-            font-weight: 600;
-            animation: slideInRight 0.3s ease;
+            font-weight: 700;
+            animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         @keyframes slideInRight {
             from {
                 opacity: 0;
-                transform: translateX(100px);
+                transform: translateX(150px);
             }
             to {
                 opacity: 1;
@@ -729,60 +794,31 @@
 
         .cart-notification::before {
             content: "✓";
-            margin-right: 8px;
-            font-size: 1.2rem;
-        }
-
-        /* Sync Indicator */
-        .sync-indicator {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: #2a5298;
-            color: white;
-            padding: 10px 18px;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            z-index: 1000;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .sync-indicator.syncing {
-            background: #f39c12;
-        }
-
-        .sync-indicator.success {
-            background: #27ae60;
-        }
-
-        .sync-indicator.error {
-            background: #e74c3c;
+            margin-right: 10px;
+            font-size: 1.3rem;
         }
 
         /* Responsive */
         @media (min-width: 768px) {
             .menu-grid {
                 grid-template-columns: repeat(3, 1fr);
-                gap: 18px;
+                gap: 20px;
             }
             
             .item-image-container {
-                height: 160px;
+                height: 180px;
             }
             
             .detail-image-container {
-                height: 350px;
+                height: 400px;
             }
 
             .brand-name {
-                font-size: 2.5rem;
+                font-size: 3rem;
             }
 
-            .preloader-brand {
-                font-size: 2.8rem;
+            .preloader-restaurant {
+                font-size: 4rem;
             }
         }
 
@@ -797,16 +833,12 @@
     <!-- Preloader -->
     <div class="preloader" id="preloader">
         <div class="preloader-logo">🍽️</div>
-        <div class="preloader-brand">ARKEON ETHIOPIA</div>
-        <div class="preloader-tagline">Crafting Culinary Excellence</div>
-        <div class="preloader-spinner"></div>
-        <div class="preloader-progress">
-            <div class="preloader-progress-bar" id="progressBar"></div>
+        <div class="preloader-restaurant">
+            <span>A</span><span>r</span><span>k</span><span>e</span><span>o</span><span>n</span>
         </div>
+        <div class="preloader-tagline">Ethiopia</div>
+        <div class="preloader-spinner"></div>
     </div>
-
-    <!-- Sync Indicator -->
-    <div class="sync-indicator" id="syncIndicator">🔄 Syncing...</div>
 
     <!-- Header Section -->
     <header class="header">
@@ -826,7 +858,7 @@
 
     <!-- Category Filter -->
     <div class="category-section">
-        <div class="section-title">Browse Categories</div>
+        <div class="section-title">Categories</div>
         <div class="category-filter">
             <button class="filter-btn active" data-category="all">All</button>
             <button class="filter-btn" data-category="breakfast">🍳 Breakfast</button>
@@ -851,7 +883,7 @@
             <button class="close-btn" id="closeModal">✕</button>
             <div class="detail-image-container" id="detailImageContainer">
                 <img class="detail-image" id="detailImage" alt="Food item">
-                <div class="detail-image-placeholder" id="detailImagePlaceholder">Loading image...</div>
+                <div class="detail-image-placeholder" id="detailImagePlaceholder">🍽️</div>
                 <div class="detail-badge" id="detailBadge">Popular</div>
                 <button class="detail-favorite" id="detailFavorite">🤍</button>
             </div>
@@ -893,7 +925,7 @@
     </div>
 
     <!-- Cart Notification -->
-    <div class="cart-notification" id="cartNotification">Item added to cart!</div>
+    <div class="cart-notification" id="cartNotification">Added to favorites!</div>
 
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.38.0/dist/umd/supabase.min.js"></script>
@@ -903,7 +935,6 @@
         const SUPABASE_URL = 'https://umupbrhhjjnbkscyacmn.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtdXBicmhoampuYmtzY3lhY21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1NzcwNTAsImV4cCI6MjA3NzE1MzA1MH0.lxMiEsGgK9VpUzcrjUSaw6ZvLK7uOtTz4S2_fSnJWOM';
 
-        // Initialize Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ===== APPLICATION STATE =====
@@ -912,67 +943,51 @@
         let currentSearchTerm = '';
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         let currentItem = null;
-        let preloaderProgress = 0;
 
         // DOM Elements
         const preloader = document.getElementById('preloader');
-        const progressBar = document.getElementById('progressBar');
         const menuGrid = document.getElementById('menuGrid');
         const detailModal = document.getElementById('detailModal');
         const closeModal = document.getElementById('closeModal');
         const filterBtns = document.querySelectorAll('.filter-btn');
         const searchInput = document.getElementById('searchInput');
-        const syncIndicator = document.getElementById('syncIndicator');
         const detailFavoriteBtn = document.getElementById('detailFavorite');
+        const cartNotification = document.getElementById('cartNotification');
 
         // ===== PRELOADER FUNCTIONS =====
-        function updatePreloaderProgress(percent) {
-            preloaderProgress = Math.min(percent, 100);
-            progressBar.style.width = preloaderProgress + '%';
-        }
-
         function hidePreloader() {
-            updatePreloaderProgress(100);
             setTimeout(() => {
                 preloader.classList.add('hidden');
                 document.body.classList.add('loaded');
-            }, 300);
+            }, 100);
         }
 
-        // ===== SUPABASE FUNCTIONS =====
+        // ===== OPTIMIZED DATA LOADING =====
         async function loadMenuItems() {
-            updatePreloaderProgress(20);
-            
             try {
+                // Fast query - only essential fields first
                 const { data, error } = await supabase
                     .from('menu_items')
                     .select('*')
                     .order('created_at', { ascending: false });
 
-                updatePreloaderProgress(50);
-
                 if (error) throw error;
 
                 menuData = data || [];
                 
-                updatePreloaderProgress(70);
-                
-                // Show first batch immediately (70% ready)
                 if (menuData.length > 0) {
-                    const firstBatch = menuData.slice(0, Math.ceil(menuData.length * 0.7));
-                    renderMenuItems(firstBatch, false);
-                    
-                    // Hide preloader at 70%
+                    // Show first 6 items immediately
+                    const initialBatch = menuData.slice(0, 6);
+                    renderMenuItems(initialBatch, false);
                     hidePreloader();
                     
-                    // Load remaining items in background
+                    // Load rest after 100ms
                     setTimeout(() => {
-                        const remainingItems = menuData.slice(Math.ceil(menuData.length * 0.7));
+                        const remainingItems = menuData.slice(6);
                         if (remainingItems.length > 0) {
                             appendMenuItems(remainingItems);
                         }
-                        updatePreloaderProgress(100);
-                    }, 500);
+                    }, 100);
                 } else {
                     showEmptyState();
                     hidePreloader();
@@ -986,16 +1001,6 @@
         }
 
         // ===== UI FUNCTIONS =====
-        function showSyncIndicator(text, type = 'syncing') {
-            syncIndicator.textContent = text;
-            syncIndicator.className = `sync-indicator ${type}`;
-            syncIndicator.style.display = 'block';
-        }
-
-        function hideSyncIndicator() {
-            syncIndicator.style.display = 'none';
-        }
-
         function showEmptyState() {
             menuGrid.innerHTML = `
                 <div class="empty-state">
@@ -1046,8 +1051,8 @@
             
             menuItem.innerHTML = `
                 <div class="item-image-container">
-                    <img class="item-image" src="${item.image}" alt="${item.name}" loading="lazy">
-                    <div class="image-placeholder">🖼️</div>
+                    <img class="item-image" data-src="${item.image}" alt="${item.name}">
+                    <div class="image-placeholder">🍽️</div>
                     <div class="item-badge">${item.badge}</div>
                     <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${item.id}">
                         ${isFavorite ? '❤' : '🤍'}
@@ -1081,17 +1086,31 @@
                 openDetailModal(item);
             });
             
+            // Lazy load image
             const img = menuItem.querySelector('.item-image');
             const placeholder = menuItem.querySelector('.image-placeholder');
             
-            img.addEventListener('load', function() {
-                this.classList.add('loaded');
-                placeholder.classList.add('hidden');
-            });
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const image = entry.target;
+                        image.src = image.dataset.src;
+                        
+                        image.addEventListener('load', function() {
+                            this.classList.add('loaded');
+                            placeholder.classList.add('hidden');
+                        });
+                        
+                        image.addEventListener('error', function() {
+                            placeholder.innerHTML = '🍽️';
+                        });
+                        
+                        observer.unobserve(image);
+                    }
+                });
+            }, { rootMargin: '50px' });
             
-            img.addEventListener('error', function() {
-                placeholder.innerHTML = '🍽️';
-            });
+            observer.observe(img);
             
             return menuItem;
         }
@@ -1100,13 +1119,11 @@
             currentItem = item;
             const isFavorite = favorites.includes(item.id);
             
-            // Reset image state
             const detailImage = document.getElementById('detailImage');
             const detailPlaceholder = document.getElementById('detailImagePlaceholder');
             detailImage.classList.remove('loaded');
             detailPlaceholder.classList.remove('hidden');
             
-            // Set content
             detailImage.src = item.image;
             detailImage.alt = item.name;
             document.getElementById('detailBadge').textContent = item.badge;
@@ -1116,7 +1133,6 @@
             document.getElementById('detailLocation').textContent = item.location;
             document.getElementById('detailDescription').textContent = item.description;
             
-            // Handle nutrition data
             let nutrition = item.nutrition;
             if (typeof nutrition === 'string') {
                 try {
@@ -1131,13 +1147,11 @@
             document.getElementById('nutritionFats').textContent = nutrition.fats || 0;
             document.getElementById('nutritionCarbs').textContent = nutrition.carbs || 0;
             
-            // Update price
             document.getElementById('detailPrice').textContent = `ETB ${parseFloat(item.price).toFixed(2)}`;
             
             detailModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Handle image load
             detailImage.addEventListener('load', function() {
                 this.classList.add('loaded');
                 detailPlaceholder.classList.add('hidden');
@@ -1157,17 +1171,26 @@
             const index = favorites.indexOf(itemId);
             if (index > -1) {
                 favorites.splice(index, 1);
+                showNotification('Removed from favorites!');
             } else {
                 favorites.push(itemId);
+                showNotification('Added to favorites!');
             }
             localStorage.setItem('favorites', JSON.stringify(favorites));
             
-            // If on favorites filter, refresh the view
             if (currentFilter === 'favorites') {
                 applyFilters();
             } else {
                 updateFavoritesUI();
             }
+        }
+
+        function showNotification(message) {
+            cartNotification.textContent = message;
+            cartNotification.style.display = 'flex';
+            setTimeout(() => {
+                cartNotification.style.display = 'none';
+            }, 2000);
         }
 
         function updateFavoritesUI() {
@@ -1178,7 +1201,6 @@
                 btn.innerHTML = isFavorite ? '❤' : '🤍';
             });
 
-            // Update detail modal favorite button if open
             if (currentItem) {
                 const isFavorite = favorites.includes(currentItem.id);
                 detailFavoriteBtn.innerHTML = isFavorite ? '❤' : '🤍';
@@ -1215,7 +1237,6 @@
 
         // ===== EVENT LISTENERS =====
         function setupEventListeners() {
-            // Filter buttons
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
@@ -1224,7 +1245,6 @@
                 });
             });
 
-            // Search
             let searchTimeout;
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
@@ -1234,14 +1254,12 @@
                 }, 300);
             });
 
-            // Modal close
             closeModal.addEventListener('click', closeDetailModal);
             
             detailModal.addEventListener('click', (e) => {
                 if (e.target === detailModal) closeDetailModal();
             });
 
-            // Detail favorite button
             detailFavoriteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (currentItem) {
@@ -1249,7 +1267,6 @@
                 }
             });
 
-            // Keyboard
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') closeDetailModal();
             });
@@ -1257,16 +1274,11 @@
 
         // ===== INITIALIZATION =====
         async function initializeApp() {
-            updatePreloaderProgress(10);
-            
             setupEventListeners();
-            
             await loadMenuItems();
-            
             updateFavoritesUI();
         }
 
-        // Start app when DOM is ready
         document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
