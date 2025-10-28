@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delicious Bites - Admin Panel</title>
+    <title>Arkeon Ethiopia - Admin Panel</title>
     <style>
         /* ===== RESET & BASE STYLES ===== */
         * {
@@ -13,7 +13,7 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 50%, #feca57 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -77,11 +77,11 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #ff6b6b;
         }
 
         .login-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
             border: none;
             padding: 15px;
@@ -114,7 +114,7 @@
         }
 
         .admin-header {
-            background: linear-gradient(135deg, #2d3436, #636e72);
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
             padding: 30px;
             display: flex;
@@ -213,11 +213,104 @@
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #ff6b6b;
         }
 
         .form-group.full-width {
             grid-column: 1 / -1;
+        }
+
+        /* Image Upload Styles */
+        .image-upload-container {
+            border: 3px dashed #e9ecef;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: white;
+            cursor: pointer;
+        }
+
+        .image-upload-container:hover {
+            border-color: #ff6b6b;
+            background: #fff5f5;
+        }
+
+        .image-upload-container.dragover {
+            border-color: #ff6b6b;
+            background: #fff0f0;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .upload-text {
+            color: #636e72;
+            margin-bottom: 10px;
+        }
+
+        .upload-text strong {
+            color: #ff6b6b;
+        }
+
+        .upload-subtext {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        #itemImageFile {
+            display: none;
+        }
+
+        .image-preview-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .image-preview-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .remove-image-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
         .form-actions {
@@ -238,13 +331,19 @@
         }
 
         .btn-primary {
-            background: #667eea;
+            background: #ff6b6b;
             color: white;
         }
 
         .btn-primary:hover {
-            background: #764ba2;
+            background: #ff5252;
             transform: translateY(-2px);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-secondary {
@@ -362,7 +461,7 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: 800;
-            color: #667eea;
+            color: #ff6b6b;
             margin-bottom: 5px;
         }
 
@@ -406,7 +505,7 @@
         }
 
         .modal-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
             padding: 25px;
             text-align: center;
@@ -444,7 +543,7 @@
             position: fixed;
             top: 10px;
             right: 10px;
-            background: #ee5a24;
+            background: #ff6b6b;
             color: white;
             padding: 8px 15px;
             border-radius: 20px;
@@ -533,7 +632,7 @@
     <div class="login-container" id="loginContainer">
         <div class="login-logo">🍽️</div>
         <h1 class="login-title">Admin Panel</h1>
-        <p class="login-subtitle">Delicious Bites Restaurant Management</p>
+        <p class="login-subtitle">Arkeon Ethiopia Restaurant Management</p>
 
         <form class="login-form" id="loginForm">
             <div class="form-group">
@@ -557,7 +656,7 @@
         <div style="margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 10px; font-size: 0.9rem; color: #636e72;">
             <strong>Default Credentials:</strong><br>
             Username: <code>admin</code><br>
-            Password: <code>delicious2024</code>
+            Password: <code>arkeon2024</code>
         </div>
     </div>
 
@@ -569,7 +668,7 @@
         <div class="admin-header">
             <div>
                 <h1>Menu Management Dashboard</h1>
-                <p style="opacity: 0.8; margin-top: 5px;">Delicious Bites Restaurant</p>
+                <p style="opacity: 0.9; margin-top: 5px;">Arkeon Ethiopia</p>
             </div>
             <div class="admin-user">
                 <span>Welcome, Admin</span>
@@ -643,10 +742,36 @@
                             <label for="itemLocation">Location</label>
                             <input type="text" id="itemLocation" value="Addis Ababa, Ethiopia" required>
                         </div>
-                        <div class="form-group">
-                            <label for="itemImage">Image URL</label>
-                            <input type="url" id="itemImage" placeholder="https://example.com/image.jpg" required>
+                        
+                        <!-- IMAGE UPLOAD SECTION (NEW!) -->
+                        <div class="form-group full-width">
+                            <label>Food Image</label>
+                            <div class="image-upload-container" id="imageUploadContainer">
+                                <span class="upload-icon">📸</span>
+                                <p class="upload-text">
+                                    <strong>Click to upload</strong> or drag and drop
+                                </p>
+                                <p class="upload-subtext">PNG, JPG, WEBP up to 5MB</p>
+                                <input type="file" id="itemImageFile" accept="image/*">
+                            </div>
+                            
+                            <div class="upload-progress" id="uploadProgress">
+                                <div class="upload-progress-bar" id="uploadProgressBar"></div>
+                            </div>
+                            
+                            <div class="image-preview-container" id="imagePreviewContainer">
+                                <img id="imagePreview" class="image-preview" alt="Preview">
+                                <div class="image-preview-actions">
+                                    <button type="button" class="remove-image-btn" id="removeImageBtn">
+                                        🗑️ Remove Image
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden field to store the image URL -->
+                            <input type="hidden" id="itemImage" required>
                         </div>
+                        
                         <div class="form-group full-width">
                             <label for="itemDescription">Description</label>
                             <textarea id="itemDescription" rows="3" placeholder="Describe the menu item..." required></textarea>
@@ -692,7 +817,6 @@
                 <div class="form-actions">
                     <button class="btn btn-secondary" id="exportBtn">Export Menu Data</button>
                     <button class="btn btn-primary" id="importBtn">Import Sample Data</button>
-                    <input type="file" id="importFile" accept=".json" style="display: none;">
                 </div>
             </div>
         </div>
@@ -742,23 +866,26 @@
             anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtdXBicmhoampuYmtzY3lhY21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE1NzcwNTAsImV4cCI6MjA3NzE1MzA1MH0.lxMiEsGgK9VpUzcrjUSaw6ZvLK7uOtTz4S2_fSnJWOM'
         };
 
+        // Storage bucket name
+        const STORAGE_BUCKET = 'menu-images';
+
         // Initialize Supabase client
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
         
-        // Make supabase available globally (for compatibility with existing code)
+        // Make supabase available globally
         window.supabase = supabaseClient;
     </script>
 
     <!-- Main Application Script -->
     <script>
         // ===== PASSWORD MANAGEMENT SYSTEM =====
-        const STORAGE_KEY = 'deliciousBitesAdminCredentials';
+        const STORAGE_KEY = 'arkeonEthiopiaAdminCredentials';
         
         // Default credentials
         const DEFAULT_CREDENTIALS = {
             username: "admin",
-            password: "delicious2024"
+            password: "arkeon2024"
         };
 
         // Load credentials from localStorage or use defaults
@@ -780,6 +907,118 @@
         // Get current credentials
         let ADMIN_CREDENTIALS = loadCredentials();
 
+        // ===== IMAGE UPLOAD FUNCTIONALITY =====
+        let currentImageFile = null;
+        let currentImageUrl = null;
+
+        // Upload image to Supabase Storage
+        async function uploadImageToStorage(file) {
+            try {
+                showSyncIndicator('📤 Uploading image...', 'syncing');
+                
+                // Create unique filename
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const filePath = `${fileName}`;
+
+                // Show upload progress
+                document.getElementById('uploadProgress').style.display = 'block';
+                document.getElementById('uploadProgressBar').style.width = '30%';
+
+                // Upload file to Supabase Storage
+                const { data, error } = await supabase.storage
+                    .from(STORAGE_BUCKET)
+                    .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: false
+                    });
+
+                if (error) throw error;
+
+                document.getElementById('uploadProgressBar').style.width = '70%';
+
+                // Get public URL
+                const { data: urlData } = supabase.storage
+                    .from(STORAGE_BUCKET)
+                    .getPublicUrl(filePath);
+
+                document.getElementById('uploadProgressBar').style.width = '100%';
+
+                showSyncIndicator('✅ Image uploaded', 'success');
+                setTimeout(() => {
+                    hideSyncIndicator();
+                    document.getElementById('uploadProgress').style.display = 'none';
+                    document.getElementById('uploadProgressBar').style.width = '0%';
+                }, 2000);
+
+                return urlData.publicUrl;
+
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                showSyncIndicator('❌ Upload failed', 'error');
+                document.getElementById('uploadProgress').style.display = 'none';
+                throw error;
+            }
+        }
+
+        // Handle image file selection
+        function handleImageSelect(file) {
+            if (!file) return;
+
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                alert('Please select an image file');
+                return;
+            }
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image size must be less than 5MB');
+                return;
+            }
+
+            currentImageFile = file;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Remove selected image
+        function removeImage() {
+            currentImageFile = null;
+            currentImageUrl = null;
+            document.getElementById('itemImage').value = '';
+            document.getElementById('imagePreviewContainer').style.display = 'none';
+            document.getElementById('itemImageFile').value = '';
+        }
+
+        // Delete image from storage (when deleting menu item)
+        async function deleteImageFromStorage(imageUrl) {
+            try {
+                // Extract file path from URL
+                const urlParts = imageUrl.split('/');
+                const fileName = urlParts[urlParts.length - 1];
+                
+                if (!fileName || !imageUrl.includes(STORAGE_BUCKET)) {
+                    return; // Not a storage image, skip deletion
+                }
+
+                const { error } = await supabase.storage
+                    .from(STORAGE_BUCKET)
+                    .remove([fileName]);
+
+                if (error) throw error;
+
+            } catch (error) {
+                console.error('Error deleting image from storage:', error);
+            }
+        }
+
         // ===== LOGIN FUNCTIONALITY =====
         function handleLogin(e) {
             e.preventDefault();
@@ -788,15 +1027,11 @@
             const password = document.getElementById('password').value;
 
             if (username === ADMIN_CREDENTIALS.username && password === ADMIN_CREDENTIALS.password) {
-                // Successful login
                 loginContainer.style.display = 'none';
                 adminPanel.style.display = 'block';
                 errorMessage.style.display = 'none';
-                
-                // Initialize admin panel after login
                 initAdminPanelAfterLogin();
             } else {
-                // Failed login
                 errorMessage.style.display = 'block';
             }
         }
@@ -838,7 +1073,6 @@
                 return;
             }
             
-            // Update credentials
             ADMIN_CREDENTIALS.password = newPassword;
             saveCredentials(ADMIN_CREDENTIALS);
             
@@ -869,9 +1103,11 @@
         const cancelEdit = document.getElementById('cancelEdit');
         const exportBtn = document.getElementById('exportBtn');
         const importBtn = document.getElementById('importBtn');
-        const importFile = document.getElementById('importFile');
         const syncIndicator = document.getElementById('syncIndicator');
         const supabaseStatus = document.getElementById('supabaseStatus');
+        const imageUploadContainer = document.getElementById('imageUploadContainer');
+        const itemImageFile = document.getElementById('itemImageFile');
+        const removeImageBtn = document.getElementById('removeImageBtn');
 
         // ===== SUPABASE OPERATIONS =====
 
@@ -885,7 +1121,7 @@
 
                 if (error) throw error;
                 
-                supabaseStatus.innerHTML = '<strong>🌐 Database Status:</strong> <span style="color: #27ae60;">Connected to Supabase</span>';
+                supabaseStatus.innerHTML = '<strong>🌐 Database Status:</strong> <span style="color: #27ae60;">Connected to Supabase ✓</span>';
                 supabaseStatus.className = 'supabase-status connected';
                 return true;
             } catch (error) {
@@ -935,6 +1171,12 @@
             showSyncIndicator('🔄 Adding item...', 'syncing');
             
             try {
+                // Upload image if file is selected
+                let imageUrl = itemData.image;
+                if (currentImageFile) {
+                    imageUrl = await uploadImageToStorage(currentImageFile);
+                }
+
                 // Prepare nutrition data
                 const nutritionData = {
                     calories: parseInt(itemData.nutritionCalories),
@@ -953,7 +1195,7 @@
                             price: parseFloat(itemData.price),
                             location: itemData.location,
                             badge: itemData.badge,
-                            image: itemData.image,
+                            image: imageUrl,
                             nutrition: nutritionData
                         }
                     ])
@@ -964,7 +1206,6 @@
                 showSyncIndicator('✅ Item added', 'success');
                 setTimeout(() => hideSyncIndicator(), 2000);
                 
-                // Reload items to show the new one
                 await loadMenuItems();
                 return data[0];
                 
@@ -981,6 +1222,18 @@
             showSyncIndicator('🔄 Updating item...', 'syncing');
             
             try {
+                // Upload new image if file is selected
+                let imageUrl = itemData.image;
+                if (currentImageFile) {
+                    // Delete old image if it was from storage
+                    const oldItem = menuData.find(item => item.id === itemId);
+                    if (oldItem && oldItem.image) {
+                        await deleteImageFromStorage(oldItem.image);
+                    }
+                    
+                    imageUrl = await uploadImageToStorage(currentImageFile);
+                }
+
                 const nutritionData = {
                     calories: parseInt(itemData.nutritionCalories),
                     proteins: parseFloat(itemData.nutritionProteins),
@@ -997,7 +1250,7 @@
                         price: parseFloat(itemData.price),
                         location: itemData.location,
                         badge: itemData.badge,
-                        image: itemData.image,
+                        image: imageUrl,
                         nutrition: nutritionData
                     })
                     .eq('id', itemId)
@@ -1008,7 +1261,6 @@
                 showSyncIndicator('✅ Item updated', 'success');
                 setTimeout(() => hideSyncIndicator(), 2000);
                 
-                // Reload items to show the updated one
                 await loadMenuItems();
                 return data[0];
                 
@@ -1025,6 +1277,9 @@
             showSyncIndicator('🔄 Deleting item...', 'syncing');
             
             try {
+                // Get item to delete image from storage
+                const item = menuData.find(i => i.id === itemId);
+                
                 const { error } = await supabase
                     .from('menu_items')
                     .delete()
@@ -1032,10 +1287,14 @@
 
                 if (error) throw error;
 
+                // Delete image from storage
+                if (item && item.image) {
+                    await deleteImageFromStorage(item.image);
+                }
+
                 showSyncIndicator('✅ Item deleted', 'success');
                 setTimeout(() => hideSyncIndicator(), 2000);
                 
-                // Reload items
                 await loadMenuItems();
                 
             } catch (error) {
@@ -1078,8 +1337,6 @@
         // Handle real-time updates
         function handleRealtimeUpdate(payload) {
             showSyncIndicator('🔄 Live update received', 'syncing');
-            
-            // Reload the menu items to ensure consistency
             loadMenuItems();
         }
 
@@ -1110,6 +1367,16 @@
         async function handleFormSubmit(e) {
             e.preventDefault();
             
+            // Check if image is provided
+            if (!currentImageFile && !document.getElementById('itemImage').value) {
+                alert('Please upload an image for the menu item');
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = isEditing ? 'Updating...' : 'Adding...';
+            
             const formData = {
                 name: document.getElementById('itemName').value,
                 category: document.getElementById('itemCategory').value,
@@ -1135,6 +1402,9 @@
                 
             } catch (error) {
                 alert(`Error: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = isEditing ? 'Update Item' : 'Add Menu Item';
             }
         }
 
@@ -1156,7 +1426,6 @@
                 const itemCard = document.createElement('div');
                 itemCard.className = 'item-card';
                 
-                // Handle nutrition data format
                 let nutrition = item.nutrition;
                 if (typeof nutrition === 'string') {
                     try {
@@ -1168,7 +1437,7 @@
 
                 itemCard.innerHTML = `
                     <div class="item-header">
-                        <img src="${item.image}" alt="${item.name}" class="preview-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRjBGMEYwIi8+CjxwYXRoIGQ9Ik00MCA0MEM0Mi43NjE0IDQwIDQ1IDM3Ljc2MTQgNDUgMzVDNDUgMzIuMjM4NiA0Mi43NjE0IDMwIDQwIDMwQzM3LjIzODYgMzAgMzUgMzIuMjM4NiAzNSAzNUMzNSAzNy43NjE0IDM3LjIzODYgNDAgNDAgNDBaIiBmaWxsPSIjQ0VDRUNFIi8+CjxwYXRoIGQ9Ik00OC41IDMwSDMxLjVDMzAuMTE5MyAzMCAyOSAzMS4xMTkzIDI5IDMyLjVWNDcuNUMyOSA0OC44ODA3IDMwLjExOTMgNTAgMzEuNSA1MEg0OC41QzQ5Ljg4MDcgNTAgNTEgNDguODgwNyA1MSA0Ny41VjMyLjVDNTEgMzEuMTE5MyA0OS44ODA3IDMwIDQ4LjUgMzBaTTQwIDQyQzM3LjIzODYgNDIgMzUgMzkuNzYxNCAzNSAzN0MzNSAzNC4yMzg2IDM3LjIzODYgMzIgNDAgMzJDNDIuNzYxNCAzMiA0NSAzNC4yMzg2IDQ1IDM3QzQ1IDM5Ljc2MTQgNDIuNzYxNCA0MiA0MCA0MloiIGZpbGw9IiNDRUNFQ0UiLz4KPC9zdmc+'">
+                        <img src="${item.image}" alt="${item.name}" class="preview-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRjBGMEYwIi8+Cjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LXNpemU9IjQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+NvTwvdGV4dD4KPC9zdmc+'">
                         <div class="item-info">
                             <h4>${item.name}</h4>
                             <p>${item.category} • ETB ${parseFloat(item.price).toFixed(2)} • ${item.badge}</p>
@@ -1183,7 +1452,6 @@
                 itemsList.appendChild(itemCard);
             });
 
-            // Add event listeners
             document.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1205,7 +1473,6 @@
             const item = menuData.find(item => item.id === itemId);
             if (!item) return;
 
-            // Handle nutrition data format
             let nutrition = item.nutrition;
             if (typeof nutrition === 'string') {
                 try {
@@ -1215,7 +1482,6 @@
                 }
             }
 
-            // Fill form with item data
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemCategory').value = item.category;
             document.getElementById('itemDescription').value = item.description;
@@ -1228,14 +1494,17 @@
             document.getElementById('nutritionFats').value = nutrition.fats || 0;
             document.getElementById('nutritionCarbs').value = nutrition.carbs || 0;
 
-            // Update form for editing
+            // Show current image
+            document.getElementById('imagePreview').src = item.image;
+            document.getElementById('imagePreviewContainer').style.display = 'block';
+            currentImageUrl = item.image;
+
             isEditing = true;
             currentEditId = itemId;
             document.getElementById('formTitle').textContent = 'Edit Menu Item';
             document.getElementById('submitBtn').textContent = 'Update Item';
             cancelEdit.style.display = 'block';
 
-            // Scroll to form
             document.querySelector('.admin-content').scrollTop = 0;
         }
 
@@ -1251,6 +1520,7 @@
 
         function resetForm() {
             menuItemForm.reset();
+            removeImage();
             isEditing = false;
             currentEditId = null;
             document.getElementById('formTitle').textContent = 'Add New Menu Item';
@@ -1267,7 +1537,7 @@
             
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
-            link.download = 'delicious-bites-menu.json';
+            link.download = 'arkeon-ethiopia-menu.json';
             link.click();
             
             alert('📥 Menu data exported successfully!');
@@ -1278,24 +1548,24 @@
 
             const sampleData = [
                 {
-                    name: "Double Beef Cheese Burger",
+                    name: "Traditional Tibs",
                     category: "lunch",
-                    description: "Juicy beef burger with cheese and special sauce",
-                    price: 459.00,
+                    description: "Spicy Ethiopian beef tibs with injera",
+                    price: 250.00,
                     location: "Addis Ababa, Ethiopia",
                     badge: "Popular",
-                    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
-                    nutrition: { calories: 198, proteins: 23.2, fats: 13.8, carbs: 23.7 }
+                    image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600&h=400&fit=crop",
+                    nutrition: { calories: 350, proteins: 28.5, fats: 18.2, carbs: 15.8 }
                 },
                 {
-                    name: "Fresh Fruit Smoothie",
+                    name: "Ethiopian Coffee",
                     category: "drinks",
-                    description: "Blend of fresh fruits and yogurt",
-                    price: 180.00,
+                    description: "Traditional Ethiopian coffee ceremony brew",
+                    price: 80.00,
                     location: "Addis Ababa, Ethiopia",
-                    badge: "Healthy",
-                    image: "https://images.unsplash.com/photo-1570197788417-0e82375c9371?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80",
-                    nutrition: { calories: 150, proteins: 3.2, fats: 0.5, carbs: 35.2 }
+                    badge: "Special",
+                    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop",
+                    nutrition: { calories: 5, proteins: 0.3, fats: 0.1, carbs: 0.0 }
                 }
             ];
 
@@ -1311,7 +1581,6 @@
                 showSyncIndicator('✅ Sample data added', 'success');
                 setTimeout(() => hideSyncIndicator(), 2000);
                 
-                // Reload items to show the new ones
                 await loadMenuItems();
                 
             } catch (error) {
@@ -1321,21 +1590,56 @@
             }
         }
 
+        // ===== EVENT LISTENERS =====
+
+        function setupImageUploadListeners() {
+            // Click to upload
+            imageUploadContainer.addEventListener('click', () => {
+                itemImageFile.click();
+            });
+
+            // File input change
+            itemImageFile.addEventListener('change', (e) => {
+                if (e.target.files && e.target.files[0]) {
+                    handleImageSelect(e.target.files[0]);
+                }
+            });
+
+            // Drag and drop
+            imageUploadContainer.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                imageUploadContainer.classList.add('dragover');
+            });
+
+            imageUploadContainer.addEventListener('dragleave', () => {
+                imageUploadContainer.classList.remove('dragover');
+            });
+
+            imageUploadContainer.addEventListener('drop', (e) => {
+                e.preventDefault();
+                imageUploadContainer.classList.remove('dragover');
+                
+                if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                    handleImageSelect(e.dataTransfer.files[0]);
+                }
+            });
+
+            // Remove image button
+            removeImageBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                removeImage();
+            });
+        }
+
         // ===== ADMIN PANEL INITIALIZATION =====
 
         async function initAdminPanelAfterLogin() {
-            // Test database connection
             await testSupabaseConnection();
-            
-            // Load menu items
             await loadMenuItems();
-            
-            // Set up real-time subscription
             setupRealtimeSubscription();
         }
 
         function initAdminPanel() {
-            // Event listeners
             loginForm.addEventListener('submit', handleLogin);
             logoutBtn.addEventListener('click', handleLogout);
             changePasswordBtn.addEventListener('click', openChangePasswordModal);
@@ -1346,12 +1650,13 @@
             cancelEdit.addEventListener('click', resetForm);
             exportBtn.addEventListener('click', exportMenuData);
             importBtn.addEventListener('click', importSampleData);
+            
+            // Setup image upload listeners
+            setupImageUploadListeners();
 
-            // Focus on username field
             document.getElementById('username').focus();
         }
 
-        // Start the application
         document.addEventListener('DOMContentLoaded', initAdminPanel);
     </script>
 </body>
