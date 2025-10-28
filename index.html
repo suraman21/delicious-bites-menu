@@ -127,11 +127,11 @@
         .header {
             background: linear-gradient(135deg, #ff6b6b, #ff8e53);
             color: white;
-            padding: 30px 20px;
-            margin: 15px 15px 20px;
-            border-radius: 25px;
+            padding: 15px 15px;
+            margin: 10px 10px 15px;
+            border-radius: 20px;
             text-align: center;
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.35);
             position: relative;
             overflow: hidden;
         }
@@ -158,27 +158,27 @@
         }
 
         .brand-name {
-            font-size: 2.3rem;
+            font-size: 1.6rem;
             font-weight: 900;
-            margin-bottom: 8px;
-            letter-spacing: 2px;
+            margin-bottom: 4px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            text-shadow: 0 3px 8px rgba(0,0,0,0.2);
         }
 
         .brand-tagline {
-            font-size: 1rem;
+            font-size: 0.85rem;
             opacity: 0.95;
             font-weight: 500;
             text-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .brand-icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
             display: block;
             animation: swing 3s ease-in-out infinite;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
         }
 
         @keyframes swing {
@@ -190,7 +190,7 @@
         /* Search Section */
         .search-section {
             padding: 0 15px;
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .search-container {
@@ -355,6 +355,9 @@
             object-fit: cover;
             transition: all 0.4s ease;
             opacity: 0;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .item-image.loaded {
@@ -372,7 +375,8 @@
             justify-content: center;
             font-size: 3rem;
             background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
+            z-index: 1;
         }
 
         .image-placeholder.hidden {
@@ -380,7 +384,7 @@
             pointer-events: none;
         }
 
-        .menu-item:hover .item-image {
+        .menu-item:hover .item-image.loaded {
             transform: scale(1.15) rotate(2deg);
         }
 
@@ -511,6 +515,11 @@
             animation: bounce 2s ease-in-out infinite;
         }
 
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
         .empty-state h3 {
             font-size: 1.5rem;
             margin-bottom: 12px;
@@ -594,6 +603,9 @@
             position: relative;
             overflow: hidden;
             background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .detail-image {
@@ -601,7 +613,10 @@
             height: 100%;
             object-fit: cover;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .detail-image.loaded {
@@ -619,11 +634,13 @@
             justify-content: center;
             font-size: 4rem;
             background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
+            z-index: 1;
         }
 
         .detail-image-placeholder.hidden {
             opacity: 0;
+            pointer-events: none;
         }
 
         .detail-badge {
@@ -800,6 +817,24 @@
 
         /* Responsive */
         @media (min-width: 768px) {
+            .header {
+                padding: 25px 20px;
+                margin: 15px 15px 20px;
+            }
+
+            .brand-name {
+                font-size: 2.5rem;
+            }
+
+            .brand-icon {
+                font-size: 2.5rem;
+                margin-bottom: 12px;
+            }
+
+            .brand-tagline {
+                font-size: 1rem;
+            }
+
             .menu-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 20px;
@@ -811,10 +846,6 @@
             
             .detail-image-container {
                 height: 400px;
-            }
-
-            .brand-name {
-                font-size: 3rem;
             }
 
             .preloader-restaurant {
@@ -845,7 +876,7 @@
         <div class="brand-content">
             <span class="brand-icon">🍽️</span>
             <div class="brand-name">Arkeon Ethiopia</div>
-            <div class="brand-tagline">Crafting Culinary Excellence Since 2010</div>
+            <div class="brand-tagline">Crafting Culinary Excellence</div>
         </div>
     </header>
 
@@ -965,7 +996,6 @@
         // ===== OPTIMIZED DATA LOADING =====
         async function loadMenuItems() {
             try {
-                // Fast query - only essential fields first
                 const { data, error } = await supabase
                     .from('menu_items')
                     .select('*')
@@ -1001,14 +1031,24 @@
         }
 
         // ===== UI FUNCTIONS =====
-        function showEmptyState() {
-            menuGrid.innerHTML = `
-                <div class="empty-state">
-                    <div class="empty-state-icon">🍽️</div>
-                    <h3>Welcome to Arkeon Ethiopia!</h3>
-                    <p>Our culinary masterpieces are being prepared.<br>Check back soon for an extraordinary dining experience!</p>
-                </div>
-            `;
+        function showEmptyState(isFavorites = false) {
+            if (isFavorites) {
+                menuGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">💔</div>
+                        <h3>No Favorites Yet!</h3>
+                        <p>Start adding your favorite dishes by clicking the heart icon on any menu item.<br><br>Your favorites will appear here for quick access!</p>
+                    </div>
+                `;
+            } else {
+                menuGrid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🍽️</div>
+                        <h3>Welcome to Arkeon Ethiopia!</h3>
+                        <p>Our culinary masterpieces are being prepared.<br>Check back soon for an extraordinary dining experience!</p>
+                    </div>
+                `;
+            }
         }
 
         function renderMenuItems(items, clearFirst = true) {
@@ -1017,7 +1057,9 @@
             }
             
             if (items.length === 0 && clearFirst) {
-                showEmptyState();
+                // Check if we're on favorites filter
+                const isFavoritesFilter = currentFilter === 'favorites';
+                showEmptyState(isFavoritesFilter);
                 return;
             }
             
@@ -1051,8 +1093,8 @@
             
             menuItem.innerHTML = `
                 <div class="item-image-container">
-                    <img class="item-image" data-src="${item.image}" alt="${item.name}">
                     <div class="image-placeholder">🍽️</div>
+                    <img class="item-image" data-src="${item.image}" alt="${item.name}">
                     <div class="item-badge">${item.badge}</div>
                     <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${item.id}">
                         ${isFavorite ? '❤' : '🤍'}
@@ -1121,8 +1163,11 @@
             
             const detailImage = document.getElementById('detailImage');
             const detailPlaceholder = document.getElementById('detailImagePlaceholder');
+            
+            // Reset to show placeholder first
             detailImage.classList.remove('loaded');
             detailPlaceholder.classList.remove('hidden');
+            detailPlaceholder.innerHTML = '🍽️';
             
             detailImage.src = item.image;
             detailImage.alt = item.name;
@@ -1152,6 +1197,7 @@
             detailModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             
+            // Load image and hide placeholder when loaded
             detailImage.addEventListener('load', function() {
                 this.classList.add('loaded');
                 detailPlaceholder.classList.add('hidden');
