@@ -113,7 +113,7 @@
         body {
             background: linear-gradient(to bottom, #fff5e6 0%, #ffe4cc 100%);
             color: #333;
-            padding-bottom: 80px;
+            padding-bottom: 20px;
             opacity: 0;
             transition: opacity 0.5s ease;
             min-height: 100vh;
@@ -337,6 +337,24 @@
         .social-icon:hover {
             transform: translateY(-3px) scale(1.1);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .developer-credit {
+            padding: 20px 25px;
+            border-top: 2px solid #f0f0f0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #636e72;
+        }
+
+        .developer-credit a {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .developer-credit a:hover {
+            text-decoration: underline;
         }
 
         /* Main Content Spacing */
@@ -1109,35 +1127,10 @@
             text-decoration: none;
         }
 
-        /* Developer Branding */
-        .developer-branding {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #2d3436, #636e72);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 0.85rem;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
-            z-index: 998;
-        }
-
-        .developer-branding a {
-            color: #feca57;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .developer-branding a:hover {
-            text-decoration: underline;
-        }
-
         /* Cart Notification */
         .cart-notification {
             position: fixed;
-            bottom: 70px;
+            bottom: 25px;
             right: 25px;
             background: linear-gradient(135deg, #00b894, #00cec9);
             color: white;
@@ -1283,8 +1276,14 @@
         <div class="social-links">
             <h4 data-i18n="follow_us">Follow Us</h4>
             <div class="social-icons" id="socialIcons">
-                <!-- Social icons will be loaded dynamically -->
+                <!-- Social icons loaded from database -->
             </div>
+        </div>
+
+        <!-- Developer Credit in Sidebar -->
+        <div class="developer-credit">
+            <span data-i18n="developed_by">Developed by</span><br>
+            <a href="https://yourwebsite.com" target="_blank">YourName</a>
         </div>
     </div>
 
@@ -1305,18 +1304,11 @@
             </div>
         </div>
 
-        <!-- Category Filter -->
+        <!-- Category Filter (Dynamic) -->
         <div class="category-section">
             <div class="section-title" data-i18n="categories">Categories</div>
-            <div class="category-filter">
-                <button class="filter-btn active" data-category="all" data-i18n="cat_all">All</button>
-                <button class="filter-btn" data-category="breakfast"><span>🍳</span> <span data-i18n="cat_breakfast">Breakfast</span></button>
-                <button class="filter-btn" data-category="lunch"><span>🍔</span> <span data-i18n="cat_lunch">Lunch</span></button>
-                <button class="filter-btn" data-category="dinner"><span>🍕</span> <span data-i18n="cat_dinner">Dinner</span></button>
-                <button class="filter-btn" data-category="dessert"><span>🍦</span> <span data-i18n="cat_dessert">Dessert</span></button>
-                <button class="filter-btn" data-category="drinks"><span>☕</span> <span data-i18n="cat_drinks">Drinks</span></button>
-                <button class="filter-btn" data-category="specials"><span>⭐</span> <span data-i18n="cat_specials">Specials</span></button>
-                <button class="filter-btn" data-category="favorites"><span>❤️</span> <span data-i18n="cat_favorites">Favorites</span></button>
+            <div class="category-filter" id="categoryFilter">
+                <!-- Categories will be loaded dynamically -->
             </div>
         </div>
 
@@ -1430,12 +1422,6 @@
         </div>
     </div>
 
-    <!-- Developer Branding -->
-    <div class="developer-branding">
-        <span data-i18n="developed_by">Developed by</span> <a href="https://yourwebsite.com" target="_blank">YourName</a> | 
-        <span data-i18n="powered_by">Powered by Supabase</span>
-    </div>
-
     <!-- Cart Notification -->
     <div class="cart-notification" id="cartNotification">Added to favorites!</div>
 
@@ -1449,7 +1435,7 @@
 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // ===== TRANSLATIONS =====
+        // ===== TRANSLATIONS - CUSTOMIZE AMHARIC TEXT HERE ===== 
         const translations = {
             en: {
                 restaurant_name: 'Arkeon Ethiopia',
@@ -1457,12 +1443,6 @@
                 search_placeholder: 'Search for delicious dishes...',
                 categories: 'Categories',
                 cat_all: 'All',
-                cat_breakfast: 'Breakfast',
-                cat_lunch: 'Lunch',
-                cat_dinner: 'Dinner',
-                cat_dessert: 'Dessert',
-                cat_drinks: 'Drinks',
-                cat_specials: 'Specials',
                 cat_favorites: 'Favorites',
                 our_menu: 'Our Menu',
                 description: 'Description',
@@ -1488,28 +1468,24 @@
                 contact_title: 'Contact Us',
                 contact_subtitle: 'Get in touch with us',
                 developed_by: 'Developed by',
-                powered_by: 'Powered by Supabase',
                 empty_favorites: 'No Favorites Yet!',
                 empty_favorites_desc: 'Start adding your favorite dishes by clicking the heart icon on any menu item.<br><br>Your favorites will appear here for quick access!',
                 empty_menu: 'Welcome to Arkeon Ethiopia!',
                 empty_menu_desc: 'Our culinary masterpieces are being prepared.<br>Check back soon for an extraordinary dining experience!',
+                no_items_category: 'No items in this category',
+                no_items_category_desc: 'Check back soon for delicious items in this category!',
                 added_favorites: 'Added to favorites!',
                 removed_favorites: 'Removed from favorites!',
                 feedback_success: 'Thank you for your feedback!',
                 feedback_error: 'Error submitting feedback. Please try again.'
             },
             am: {
+                // ===== EDIT AMHARIC TRANSLATIONS HERE =====
                 restaurant_name: 'አርኬን ኢትዮጵያ',
                 tagline: 'ከ 2010 ዓ.ም ጀምሮ የምግብ ብቃት እየፈጠርን',
                 search_placeholder: 'ለጣዕም ምግቦች ይፈልጉ...',
                 categories: 'ምድቦች',
                 cat_all: 'ሁሉም',
-                cat_breakfast: 'ቁርስ',
-                cat_lunch: 'ምሳ',
-                cat_dinner: 'እራት',
-                cat_dessert: 'ጣፋጭ',
-                cat_drinks: 'መጠጦች',
-                cat_specials: 'ልዩ',
                 cat_favorites: 'ተወዳጆች',
                 our_menu: 'የእኛ ምናሌ',
                 description: 'መግለጫ',
@@ -1535,11 +1511,12 @@
                 contact_title: 'አግኙን',
                 contact_subtitle: 'ያናግሩን',
                 developed_by: 'የተገነባው በ',
-                powered_by: 'የሚንቀሳቀሰው በ Supabase',
                 empty_favorites: 'ገና ምንም ተወዳጅ የለም!',
                 empty_favorites_desc: 'በማንኛውም የምግብ ዕቃ ላይ የልብ ምልክቱን በመጫን ተወዳጅ ምግቦችዎን ማከል ይጀምሩ።<br><br>ተወዳጆችዎ ለፈጣን መዳረሻ እዚህ ይታያሉ!',
                 empty_menu: 'እንኳን ወደ አርኬን ኢትዮጵያ በደህና መጡ!',
                 empty_menu_desc: 'የእኛ ምግብ ብቃቶች እየተዘጋጁ ነው።<br>ለልዩ የምግብ ልምድ በቅርቡ ይመለሱ!',
+                no_items_category: 'በዚህ ምድብ ውስጥ ምንም ነገር የለም',
+                no_items_category_desc: 'በዚህ ምድብ ውስጥ ለጣፋጭ ዕቃዎች በቅርቡ ይመለሱ!',
                 added_favorites: 'ወደ ተወዳጆች ታክሏል!',
                 removed_favorites: 'ከተወዳጆች ተወግዷል!',
                 feedback_success: 'ለአስተያየትዎ እናመሰግናለን!',
@@ -1556,13 +1533,14 @@
         let currentItem = null;
         let currentLanguage = localStorage.getItem('language') || 'en';
         let currentRating = 0;
+        let availableCategories = [];
 
         // DOM Elements
         const preloader = document.getElementById('preloader');
         const menuGrid = document.getElementById('menuGrid');
+        const categoryFilter = document.getElementById('categoryFilter');
         const detailModal = document.getElementById('detailModal');
         const closeModal = document.getElementById('closeModal');
-        const filterBtns = document.querySelectorAll('.filter-btn');
         const searchInput = document.getElementById('searchInput');
         const detailFavoriteBtn = document.getElementById('detailFavorite');
         const cartNotification = document.getElementById('cartNotification');
@@ -1601,6 +1579,8 @@
                 searchInput.placeholder = translations[lang][placeholder];
             }
             
+            // Re-render categories with new language
+            renderCategories();
             applyFilters();
         }
 
@@ -1610,6 +1590,76 @@
                 return item[amField];
             }
             return item[field];
+        }
+
+        // ===== CATEGORY MANAGEMENT =====
+        function extractCategories() {
+            const categories = new Set();
+            menuData.forEach(item => {
+                if (item.category) {
+                    categories.add(item.category);
+                }
+            });
+            availableCategories = Array.from(categories);
+        }
+
+        function renderCategories() {
+            categoryFilter.innerHTML = '';
+            
+            // Always show "All" button
+            const allBtn = document.createElement('button');
+            allBtn.className = 'filter-btn active';
+            allBtn.dataset.category = 'all';
+            allBtn.innerHTML = `<span>${translations[currentLanguage].cat_all}</span>`;
+            categoryFilter.appendChild(allBtn);
+            
+            // Add dynamic category buttons from menu items
+            availableCategories.forEach(category => {
+                const btn = document.createElement('button');
+                btn.className = 'filter-btn';
+                btn.dataset.category = category;
+                
+                // Get emoji for category
+                const emoji = getCategoryEmoji(category);
+                btn.innerHTML = `<span>${emoji}</span> <span>${capitalizeFirst(category)}</span>`;
+                categoryFilter.appendChild(btn);
+            });
+            
+            // Always show "Favorites" button at the end
+            const favBtn = document.createElement('button');
+            favBtn.className = 'filter-btn';
+            favBtn.dataset.category = 'favorites';
+            favBtn.innerHTML = `<span>❤️</span> <span>${translations[currentLanguage].cat_favorites}</span>`;
+            categoryFilter.appendChild(favBtn);
+            
+            // Add click listeners
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterMenu(btn.dataset.category);
+                });
+            });
+        }
+
+        function getCategoryEmoji(category) {
+            const emojiMap = {
+                'breakfast': '🍳',
+                'lunch': '🍔',
+                'dinner': '🍕',
+                'dessert': '🍦',
+                'drinks': '☕',
+                'specials': '⭐',
+                'appetizers': '🥗',
+                'main': '🍖',
+                'snacks': '🍿',
+                'beverages': '🥤'
+            };
+            return emojiMap[category.toLowerCase()] || '🍴';
+        }
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
         }
 
         // ===== SIDEBAR FUNCTIONS =====
@@ -1794,6 +1844,10 @@
 
                 menuData = data || [];
                 
+                // Extract and render categories
+                extractCategories();
+                renderCategories();
+                
                 if (menuData.length > 0) {
                     const initialBatch = menuData.slice(0, 6);
                     renderMenuItems(initialBatch, false);
@@ -1806,37 +1860,43 @@
                         }
                     }, 100);
                 } else {
-                    showEmptyState();
+                    showEmptyState('empty');
                     hidePreloader();
                 }
                 
             } catch (error) {
                 console.error('Error loading menu:', error);
-                showEmptyState();
+                showEmptyState('empty');
                 hidePreloader();
             }
         }
 
         // ===== UI FUNCTIONS =====
-        function showEmptyState(isFavorites = false) {
+        function showEmptyState(type = 'empty') {
             const lang = currentLanguage;
-            if (isFavorites) {
-                menuGrid.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">💔</div>
-                        <h3>${translations[lang].empty_favorites}</h3>
-                        <p>${translations[lang].empty_favorites_desc}</p>
-                    </div>
-                `;
+            let icon, title, desc;
+            
+            if (type === 'favorites') {
+                icon = '💔';
+                title = translations[lang].empty_favorites;
+                desc = translations[lang].empty_favorites_desc;
+            } else if (type === 'category') {
+                icon = '🔍';
+                title = translations[lang].no_items_category;
+                desc = translations[lang].no_items_category_desc;
             } else {
-                menuGrid.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">🍽️</div>
-                        <h3>${translations[lang].empty_menu}</h3>
-                        <p>${translations[lang].empty_menu_desc}</p>
-                    </div>
-                `;
+                icon = '🍽️';
+                title = translations[lang].empty_menu;
+                desc = translations[lang].empty_menu_desc;
             }
+            
+            menuGrid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">${icon}</div>
+                    <h3>${title}</h3>
+                    <p>${desc}</p>
+                </div>
+            `;
         }
 
         function renderMenuItems(items, clearFirst = true) {
@@ -1844,10 +1904,15 @@
                 menuGrid.innerHTML = '';
             }
             
-            // FIXED: Only show empty state if there are no items AND we're clearing the grid
             if (items.length === 0 && clearFirst) {
-                const isFavoritesFilter = currentFilter === 'favorites';
-                showEmptyState(isFavoritesFilter);
+                // Show different empty state based on filter
+                if (currentFilter === 'favorites') {
+                    showEmptyState('favorites');
+                } else if (currentFilter === 'all') {
+                    showEmptyState('empty');
+                } else {
+                    showEmptyState('category');
+                }
                 return;
             }
             
@@ -2094,14 +2159,6 @@
             reviewBtn.addEventListener('click', () => {
                 window.open(restaurantSettings?.google_review_url || 'https://g.page/review', '_blank');
                 closeSidebar();
-            });
-            
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    filterMenu(btn.dataset.category);
-                });
             });
 
             let searchTimeout;
