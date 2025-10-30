@@ -85,7 +85,7 @@
             border: 2px solid #e9ecef;
             border-radius: 10px;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease;
         }
 
         .form-group input:focus {
@@ -611,36 +611,6 @@
             margin-top: 25px;
         }
 
-        /* Floating Action Button */
-        .fab {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            color: white;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            display: none;
-        }
-
-        .fab:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.5);
-        }
-
-        .fab.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
         /* Items List */
         .items-list {
             display: grid;
@@ -723,6 +693,54 @@
         .delete-btn:hover {
             background: #c0392b;
             transform: translateY(-2px);
+        }
+
+        /* Category List */
+        .category-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .category-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .category-item:hover {
+            border-color: #ff6b6b;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .category-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .category-emoji {
+            font-size: 1.5rem;
+        }
+
+        .category-names {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .category-names strong {
+            font-size: 1rem;
+            color: #2d3436;
+        }
+
+        .category-names span {
+            font-size: 0.85rem;
+            color: #636e72;
         }
 
         /* Modal */
@@ -982,9 +1000,9 @@
                             <span class="sidebar-item-icon">➕</span>
                             <span data-i18n="add_item">Add New Item</span>
                         </div>
-                        <div class="sidebar-item" data-view="settings">
-                            <span class="sidebar-item-icon">⚙️</span>
-                            <span data-i18n="settings">Settings</span>
+                        <div class="sidebar-item" data-view="categories">
+                            <span class="sidebar-item-icon">📂</span>
+                            <span data-i18n="categories">Categories</span>
                         </div>
                     </div>
                 </div>
@@ -1013,12 +1031,12 @@
                             <div class="stat-label" data-i18n="total_items">Total Menu Items</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number" id="popularItems">0</div>
-                            <div class="stat-label" data-i18n="popular_items">Popular Items</div>
+                            <div class="stat-number" id="totalCategories">0</div>
+                            <div class="stat-label" data-i18n="total_categories">Total Categories</div>
                         </div>
                         <div class="stat-card">
-                            <div class="stat-number" id="categoriesCount">0</div>
-                            <div class="stat-label" data-i18n="categories">Categories</div>
+                            <div class="stat-number" id="popularItems">0</div>
+                            <div class="stat-label" data-i18n="popular_items">Popular Items</div>
                         </div>
                     </div>
 
@@ -1029,11 +1047,8 @@
                             <button class="btn btn-primary" onclick="switchView('add-item')">
                                 ➕ <span data-i18n="add_new_item">Add New Item</span>
                             </button>
-                            <button class="btn btn-secondary" id="exportBtn">
-                                📥 <span data-i18n="export_data">Export Data</span>
-                            </button>
-                            <button class="btn btn-success" id="importBtn">
-                                📤 <span data-i18n="import_sample">Import Sample</span>
+                            <button class="btn btn-secondary" onclick="switchView('categories')">
+                                📂 <span data-i18n="manage_categories">Manage Categories</span>
                             </button>
                         </div>
                     </div>
@@ -1140,8 +1155,10 @@
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="itemCategory" data-i18n="category">Category</label>
-                                    <input type="text" id="itemCategory" placeholder="e.g., lunch, dinner, drinks" required>
-                                    <small style="color: #636e72; font-size: 0.85rem;" data-i18n="category_hint">Enter category name (will create if new)</small>
+                                    <select id="itemCategory" required>
+                                        <option value="">Select Category</option>
+                                        <!-- Categories will be loaded dynamically -->
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="itemPrice" data-i18n="price">Price (ETB)</label>
@@ -1222,18 +1239,23 @@
                     </form>
                 </div>
 
-                <!-- Settings View -->
-                <div class="panel-view" id="settings-view" style="display: none;">
+                <!-- Categories View -->
+                <div class="panel-view" id="categories-view" style="display: none;">
                     <div class="panel-header">
                         <div class="panel-title">
-                            <span class="panel-title-icon">⚙️</span>
-                            <span data-i18n="settings_title">Restaurant Settings</span>
+                            <span class="panel-title-icon">📂</span>
+                            <span data-i18n="manage_categories">Manage Categories</span>
                         </div>
+                        <button class="btn btn-primary" id="addCategoryBtn">
+                            ➕ <span data-i18n="add_category">Add Category</span>
+                        </button>
                     </div>
 
-                    <div class="form-section">
-                        <div class="form-section-title" data-i18n="coming_soon">Coming Soon</div>
-                        <p data-i18n="settings_desc">Restaurant information, social media links, and other settings will be available here.</p>
+                    <div class="category-list" id="categoryList">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📂</div>
+                            <h3 data-i18n="loading">Loading...</h3>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -1273,6 +1295,44 @@
         </div>
     </div>
 
+    <!-- Add Category Modal -->
+    <div class="modal" id="addCategoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="categoryModalTitle" data-i18n="add_category_title">Add New Category</h2>
+                <button class="modal-close" id="closeCategoryModal">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <div class="form-group">
+                        <label for="categoryNameEn">
+                            <span class="language-flag">🇬🇧</span>
+                            <span data-i18n="category_name_en">Category Name (English)</span>
+                        </label>
+                        <input type="text" id="categoryNameEn" placeholder="e.g., Breakfast" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryNameAm">
+                            <span class="language-flag">🇪🇹</span>
+                            <span data-i18n="category_name_am">Category Name (Amharic)</span>
+                        </label>
+                        <input type="text" id="categoryNameAm" placeholder="ምሳሌ፡ ቁርስ" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryEmoji" data-i18n="category_emoji">Category Emoji</label>
+                        <input type="text" id="categoryEmoji" placeholder="🍴" maxlength="2" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelCategoryAdd" data-i18n="cancel">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitCategoryBtn">
+                            ✅ <span data-i18n="add_category_btn">Add Category</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
@@ -1302,17 +1362,16 @@
                 menu_dashboard: 'Dashboard',
                 menu_items: 'Menu Items',
                 add_item: 'Add New Item',
-                settings: 'Settings',
+                categories: 'Categories',
                 dashboard_title: 'Dashboard Overview',
                 db_status: 'Database Status:',
                 connecting: 'Connecting...',
                 total_items: 'Total Menu Items',
+                total_categories: 'Total Categories',
                 popular_items: 'Popular Items',
-                categories: 'Categories',
                 quick_actions: 'Quick Actions',
                 add_new_item: 'Add New Item',
-                export_data: 'Export Data',
-                import_sample: 'Import Sample',
+                manage_categories: 'Manage Categories',
                 current_menu: 'Current Menu Items',
                 add_new: 'Add New',
                 loading: 'Loading...',
@@ -1326,7 +1385,6 @@
                 description_am: 'Description (Amharic)',
                 category_pricing: 'Category & Pricing',
                 category: 'Category',
-                category_hint: 'Enter category name (will create if new)',
                 price: 'Price (ETB)',
                 badge: 'Badge',
                 food_image: 'Food Image',
@@ -1341,9 +1399,12 @@
                 carbs: 'Carbs (g)',
                 cancel: 'Cancel',
                 add_item_btn: 'Add Menu Item',
-                settings_title: 'Restaurant Settings',
-                coming_soon: 'Coming Soon',
-                settings_desc: 'Restaurant information, social media links, and other settings will be available here.',
+                add_category: 'Add Category',
+                add_category_title: 'Add New Category',
+                category_name_en: 'Category Name (English)',
+                category_name_am: 'Category Name (Amharic)',
+                category_emoji: 'Category Emoji',
+                add_category_btn: 'Add Category',
                 change_password_title: 'Change Password',
                 current_password: 'Current Password',
                 new_password: 'New Password',
@@ -1360,17 +1421,16 @@
                 menu_dashboard: 'ዳሽቦርድ',
                 menu_items: 'የምናሌ ዕቃዎች',
                 add_item: 'አዲስ ዕቃ ጨምር',
-                settings: 'ቅንብሮች',
+                categories: 'ምድቦች',
                 dashboard_title: 'የዳሽቦርድ አጠቃላይ እይታ',
                 db_status: 'የመረጃ ጎታ ሁኔታ:',
                 connecting: 'በማገናኘት ላይ...',
                 total_items: 'ጠቅላላ የምናሌ ዕቃዎች',
+                total_categories: 'ጠቅላላ ምድቦች',
                 popular_items: 'ተወዳጅ ዕቃዎች',
-                categories: 'ምድቦች',
                 quick_actions: 'ፈጣን እርምጃዎች',
                 add_new_item: 'አዲስ ዕቃ ጨምር',
-                export_data: 'መረጃ ላክ',
-                import_sample: 'ናሙና አስገባ',
+                manage_categories: 'ምድቦችን አስተዳድር',
                 current_menu: 'የአሁን የምናሌ ዕቃዎች',
                 add_new: 'አዲስ ጨምር',
                 loading: 'በመጫን ላይ...',
@@ -1384,7 +1444,6 @@
                 description_am: 'መግለጫ (አማርኛ)',
                 category_pricing: 'ምድብ እና ዋጋ',
                 category: 'ምድብ',
-                category_hint: 'የምድብ ስም ያስገቡ (አዲስ ከሆነ ይፈጠራል)',
                 price: 'ዋጋ (ብር)',
                 badge: 'ባጅ',
                 food_image: 'የምግብ ምስል',
@@ -1399,9 +1458,12 @@
                 carbs: 'ካርቦሃይድሬት (ግራም)',
                 cancel: 'ይቅር',
                 add_item_btn: 'የምናሌ ዕቃ ጨምር',
-                settings_title: 'የሬስቶራንት ቅንብሮች',
-                coming_soon: 'በቅርቡ',
-                settings_desc: 'የሬስቶራንት መረጃ፣ የማህበራዊ ሚዲያ አገናኞች እና ሌሎች ቅንብሮች እዚህ ይገኛሉ።',
+                add_category: 'ምድብ ጨምር',
+                add_category_title: 'አዲስ ምድብ ጨምር',
+                category_name_en: 'የምድብ ስም (እንግሊዝኛ)',
+                category_name_am: 'የምድብ ስም (አማርኛ)',
+                category_emoji: 'የምድብ ኢሞጂ',
+                add_category_btn: 'ምድብ ጨምር',
                 change_password_title: 'የይለፍ ቃል ቀይር',
                 current_password: 'የአሁኑ የይለፍ ቃል',
                 new_password: 'አዲስ የይለፍ ቃል',
@@ -1413,12 +1475,15 @@
 
         // ===== APPLICATION STATE =====
         let menuData = [];
+        let categoriesData = [];
         let isEditing = false;
         let currentEditId = null;
         let currentLanguage = localStorage.getItem('adminLanguage') || 'en';
         let currentImageFile = null;
         let currentImageUrl = null;
         let currentView = 'dashboard';
+        let isEditingCategory = false;
+        let currentEditCategoryId = null;
 
         const STORAGE_KEY = 'arkeonEthiopiaAdminCredentials';
         const DEFAULT_CREDENTIALS = {
@@ -1470,6 +1535,8 @@
             
             if (viewName === 'menu-items') {
                 renderItemsList();
+            } else if (viewName === 'categories') {
+                renderCategoriesList();
             }
         }
 
@@ -1637,6 +1704,124 @@
             }
         }
 
+        // ===== CATEGORY MANAGEMENT =====
+        async function loadCategories() {
+            try {
+                const { data, error } = await supabase
+                    .from('categories')
+                    .select('*')
+                    .order('id', { ascending: true });
+
+                if (error) throw error;
+
+                categoriesData = data || [];
+                updateCategoryDropdown();
+                if (currentView === 'categories') renderCategoriesList();
+                
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        function updateCategoryDropdown() {
+            const select = document.getElementById('itemCategory');
+            const currentValue = select.value;
+            
+            select.innerHTML = '<option value="">Select Category</option>';
+            
+            categoriesData.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.textContent = `${cat.emoji} ${currentLanguage === 'am' ? cat.name_am : cat.name_en}`;
+                select.appendChild(option);
+            });
+            
+            if (currentValue) select.value = currentValue;
+        }
+
+        async function addCategory(categoryData) {
+            showSyncIndicator('🔄 Adding category...', 'syncing');
+            
+            try {
+                const { error } = await supabase.from('categories').insert([{
+                    name_en: categoryData.nameEn,
+                    name_am: categoryData.nameAm,
+                    emoji: categoryData.emoji
+                }]);
+
+                if (error) throw error;
+
+                showSyncIndicator('✅ Category added!', 'success');
+                setTimeout(() => hideSyncIndicator(), 2000);
+                await loadCategories();
+                
+            } catch (error) {
+                showSyncIndicator('❌ Failed', 'error');
+                throw error;
+            }
+        }
+
+        async function deleteCategory(categoryId) {
+            if (!confirm('Delete this category? Items using this category will need to be updated.')) return;
+            
+            showSyncIndicator('🔄 Deleting...', 'syncing');
+            
+            try {
+                const { error } = await supabase.from('categories').delete().eq('id', categoryId);
+                if (error) throw error;
+
+                showSyncIndicator('✅ Deleted', 'success');
+                setTimeout(() => hideSyncIndicator(), 2000);
+                await loadCategories();
+                
+            } catch (error) {
+                showSyncIndicator('❌ Failed', 'error');
+            }
+        }
+
+        function renderCategoriesList() {
+            const list = document.getElementById('categoryList');
+            list.innerHTML = '';
+            
+            if (categoriesData.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📂</div>
+                        <h3>No Categories Yet</h3>
+                        <p>Click "Add Category" to create your first category.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            categoriesData.forEach(cat => {
+                const item = document.createElement('div');
+                item.className = 'category-item';
+                
+                item.innerHTML = `
+                    <div class="category-info">
+                        <span class="category-emoji">${cat.emoji}</span>
+                        <div class="category-names">
+                            <strong>${cat.name_en}</strong>
+                            <span>${cat.name_am}</span>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="item-action-btn delete-btn" data-id="${cat.id}">Delete</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+
+            document.querySelectorAll('.category-item .delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const categoryId = parseInt(btn.getAttribute('data-id'));
+                    deleteCategory(categoryId);
+                });
+            });
+        }
+
+        // ===== MENU ITEMS =====
         async function loadMenuItems() {
             showSyncIndicator('🔄 Loading...', 'syncing');
             
@@ -1673,7 +1858,7 @@
                 const { error } = await supabase.from('menu_items').insert([{
                     name: itemData.nameEn,
                     name_am: itemData.nameAm,
-                    category: itemData.category.toLowerCase(),
+                    category: itemData.category,
                     description: itemData.descriptionEn,
                     description_am: itemData.descriptionAm,
                     price: parseFloat(itemData.price),
@@ -1715,7 +1900,7 @@
                 const { error } = await supabase.from('menu_items').update({
                     name: itemData.nameEn,
                     name_am: itemData.nameAm,
-                    category: itemData.category.toLowerCase(),
+                    category: itemData.category,
                     description: itemData.descriptionEn,
                     description_am: itemData.descriptionAm,
                     price: parseFloat(itemData.price),
@@ -1778,8 +1963,8 @@
 
         function updateStatistics() {
             document.getElementById('totalItems').textContent = menuData.length;
+            document.getElementById('totalCategories').textContent = categoriesData.length;
             document.getElementById('popularItems').textContent = menuData.filter(i => i.badge === 'Popular').length;
-            document.getElementById('categoriesCount').textContent = new Set(menuData.map(i => i.category)).size;
         }
 
         function renderItemsList() {
@@ -1801,12 +1986,16 @@
                 const card = document.createElement('div');
                 card.className = 'item-card';
                 
+                // Find category
+                const category = categoriesData.find(c => c.id === item.category);
+                const categoryName = category ? (currentLanguage === 'am' ? category.name_am : category.name_en) : item.category;
+                
                 card.innerHTML = `
                     <div class="item-header">
                         <img src="${item.image}" alt="${item.name}" class="preview-image" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiNGMEYwRjAiLz48dGV4dCB4PSI1MCUiIHk9IjUwJSIgZm9udC1zaXplPSI0MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfjb08L3RleHQ+PC9zdmc+'">
                         <div class="item-info">
-                            <h4>${item.name}</h4>
-                            <p>${item.category} • ETB ${parseFloat(item.price).toFixed(2)} • ${item.badge}</p>
+                            <h4>${currentLanguage === 'am' ? item.name_am : item.name}</h4>
+                            <p>${categoryName} • ETB ${parseFloat(item.price).toFixed(2)} • ${item.badge}</p>
                         </div>
                     </div>
                     <div class="item-actions">
@@ -1906,49 +2095,21 @@
             }
         }
 
-        // ===== EXPORT/IMPORT =====
-        function exportMenuData() {
-            const dataStr = JSON.stringify(menuData, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'arkeon-menu.json';
-            link.click();
-            alert('📥 Menu data exported!');
-        }
-
-        async function importSampleData() {
-            if (!confirm('Add sample menu items?')) return;
-
-            const sampleData = [
-                {
-                    name: "Traditional Tibs",
-                    name_am: "ባህላዊ ጥብስ",
-                    category: "lunch",
-                    description: "Spicy Ethiopian beef tibs with injera",
-                    description_am: "ከእንጀራ ጋር የኢትዮጵያ የበሬ ሥጋ ጥብስ",
-                    price: 250.00,
-                    location: "Addis Ababa, Ethiopia",
-                    location_am: "አዲስ አበባ፣ ኢትዮጵያ",
-                    badge: "Popular",
-                    image: "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600&h=400&fit=crop",
-                    nutrition: { calories: 350, proteins: 28.5, fats: 18.2, carbs: 15.8 }
-                }
-            ];
+        async function handleCategoryFormSubmit(e) {
+            e.preventDefault();
+            
+            const formData = {
+                nameEn: document.getElementById('categoryNameEn').value,
+                nameAm: document.getElementById('categoryNameAm').value,
+                emoji: document.getElementById('categoryEmoji').value
+            };
 
             try {
-                showSyncIndicator('🔄 Adding...', 'syncing');
-                
-                for (const item of sampleData) {
-                    await supabase.from('menu_items').insert([item]);
-                }
-                
-                showSyncIndicator('✅ Added!', 'success');
-                setTimeout(() => hideSyncIndicator(), 2000);
-                await loadMenuItems();
-                
+                await addCategory(formData);
+                document.getElementById('addCategoryModal').style.display = 'none';
+                document.getElementById('categoryForm').reset();
             } catch (error) {
-                showSyncIndicator('❌ Failed', 'error');
+                alert(`Error: ${error.message}`);
             }
         }
 
@@ -1980,6 +2141,7 @@
 
         async function initAdminPanelAfterLogin() {
             await testSupabaseConnection();
+            await loadCategories();
             await loadMenuItems();
             switchLanguage(currentLanguage);
         }
@@ -2002,8 +2164,17 @@
                 resetForm();
                 switchView('menu-items');
             });
-            document.getElementById('exportBtn').addEventListener('click', exportMenuData);
-            document.getElementById('importBtn').addEventListener('click', importSampleData);
+            
+            document.getElementById('addCategoryBtn').addEventListener('click', () => {
+                document.getElementById('addCategoryModal').style.display = 'block';
+            });
+            document.getElementById('closeCategoryModal').addEventListener('click', () => {
+                document.getElementById('addCategoryModal').style.display = 'none';
+            });
+            document.getElementById('cancelCategoryAdd').addEventListener('click', () => {
+                document.getElementById('addCategoryModal').style.display = 'none';
+            });
+            document.getElementById('categoryForm').addEventListener('submit', handleCategoryFormSubmit);
             
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.addEventListener('click', () => switchLanguage(btn.dataset.lang));
