@@ -328,11 +328,11 @@
             cursor: pointer;
         }
 
-        .social-icon.facebook { background: #1877f2; color: white; }
-        .social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
-        .social-icon.twitter { background: #1da1f2; color: white; }
-        .social-icon.telegram { background: #0088cc; color: white; }
-        .social-icon.tiktok { background: #000; color: white; }
+        .social-icon.facebook { background: #1877f2; }
+        .social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .social-icon.twitter { background: #1da1f2; }
+        .social-icon.telegram { background: #0088cc; }
+        .social-icon.tiktok { background: #000; }
 
         .social-icon:hover {
             transform: translateY(-3px) scale(1.1);
@@ -1585,12 +1585,10 @@
             currentLanguage = lang;
             localStorage.setItem('language', lang);
             
-            // Update active button
             langBtns.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === lang);
             });
             
-            // Update all translatable elements
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (translations[lang][key]) {
@@ -1598,13 +1596,11 @@
                 }
             });
             
-            // Update placeholder
             const placeholder = searchInput.getAttribute('data-i18n-placeholder');
             if (placeholder && translations[lang][placeholder]) {
                 searchInput.placeholder = translations[lang][placeholder];
             }
             
-            // Re-render menu items with new language
             applyFilters();
         }
 
@@ -1662,11 +1658,11 @@
             socialIcons.innerHTML = '';
             
             const socials = [
-                { platform: 'facebook', icon: '📘', url: restaurantSettings?.facebook_url },
-                { platform: 'instagram', icon: '📷', url: restaurantSettings?.instagram_url },
-                { platform: 'twitter', icon: '🐦', url: restaurantSettings?.twitter_url },
-                { platform: 'telegram', icon: '✈️', url: restaurantSettings?.telegram_url },
-                { platform: 'tiktok', icon: '🎵', url: restaurantSettings?.tiktok_url }
+                { platform: 'facebook', emoji: '📘', url: restaurantSettings?.facebook_url },
+                { platform: 'instagram', emoji: '📷', url: restaurantSettings?.instagram_url },
+                { platform: 'twitter', emoji: '🐦', url: restaurantSettings?.twitter_url },
+                { platform: 'telegram', emoji: '✈️', url: restaurantSettings?.telegram_url },
+                { platform: 'tiktok', emoji: '🎵', url: restaurantSettings?.tiktok_url }
             ];
             
             socials.forEach(social => {
@@ -1675,7 +1671,7 @@
                     link.href = social.url;
                     link.target = '_blank';
                     link.className = `social-icon ${social.platform}`;
-                    link.textContent = social.icon;
+                    link.textContent = social.emoji;
                     socialIcons.appendChild(link);
                 }
             });
@@ -1848,6 +1844,7 @@
                 menuGrid.innerHTML = '';
             }
             
+            // FIXED: Only show empty state if there are no items AND we're clearing the grid
             if (items.length === 0 && clearFirst) {
                 const isFavoritesFilter = currentFilter === 'favorites';
                 showEmptyState(isFavoritesFilter);
@@ -2078,18 +2075,15 @@
 
         // ===== EVENT LISTENERS =====
         function setupEventListeners() {
-            // Menu toggle
             menuToggle.addEventListener('click', toggleSidebar);
             sidebarOverlay.addEventListener('click', closeSidebar);
             
-            // Language switch
             langBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     switchLanguage(btn.dataset.lang);
                 });
             });
             
-            // Sidebar items
             feedbackBtn.addEventListener('click', () => {
                 feedbackModal.style.display = 'block';
                 closeSidebar();
@@ -2102,7 +2096,6 @@
                 closeSidebar();
             });
             
-            // Filter buttons
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
@@ -2111,7 +2104,6 @@
                 });
             });
 
-            // Search
             let searchTimeout;
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
@@ -2121,7 +2113,6 @@
                 }, 300);
             });
 
-            // Modal close
             closeModal.addEventListener('click', closeDetailModal);
             closeFeedback.addEventListener('click', () => {
                 feedbackModal.style.display = 'none';
@@ -2142,7 +2133,6 @@
                 if (e.target === contactModal) contactModal.style.display = 'none';
             });
 
-            // Detail favorite button
             detailFavoriteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (currentItem) {
@@ -2150,11 +2140,9 @@
                 }
             });
 
-            // Feedback form
             feedbackForm.addEventListener('submit', submitFeedback);
             setupRatingStars();
 
-            // Keyboard
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     closeDetailModal();
