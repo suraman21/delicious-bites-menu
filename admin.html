@@ -5,24 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Arkeon Ethiopia - Admin Panel</title>
     <style>
-
-        #submitBtn {
-    position: fixed !important;
-    bottom: 30px !important;
-    right: 30px !important;
-    z-index: 9999 !important;
-    box-shadow: 0 8px 30px rgba(255, 107, 107, 0.5) !important;
-    font-size: 1.1rem !important;
-    padding: 15px 30px !important;
-}
-
-#cancelEdit {
-    position: fixed !important;
-    bottom: 30px !important;
-    right: 200px !important;
-    z-index: 9999 !important;
-}
-        
         /* ===== RESET & BASE STYLES ===== */
         * {
             margin: 0;
@@ -293,6 +275,8 @@
             padding: 30px;
             overflow-y: auto;
             background: white;
+            position: relative;
+            padding-bottom: 100px; /* Add space for fixed button */
         }
 
         .panel-header {
@@ -622,11 +606,26 @@
             background: #c0392b;
         }
 
-        .form-actions {
+        /* FIXED FORM ACTIONS - Always Visible Submit Button */
+        .fixed-form-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
             display: flex;
             gap: 15px;
-            justify-content: flex-end;
-            margin-top: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        #add-item-view .fixed-form-actions {
+            display: flex !important;
+        }
+
+        #add-item-view[style*="display: none"] .fixed-form-actions {
+            display: none !important;
         }
 
         /* Items List */
@@ -940,6 +939,13 @@
                 width: 100%;
                 justify-content: space-between;
             }
+
+            .fixed-form-actions {
+                right: 20px;
+                bottom: 20px;
+                flex-direction: column;
+                width: calc(100% - 40px);
+            }
         }
     </style>
 </head>
@@ -1061,7 +1067,7 @@
                     <!-- Quick Actions -->
                     <div class="form-section">
                         <div class="form-section-title" data-i18n="quick_actions">Quick Actions</div>
-                        <div class="form-actions">
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                             <button class="btn btn-primary" onclick="switchView('add-item')">
                                 ➕ <span data-i18n="add_new_item">Add New Item</span>
                             </button>
@@ -1248,8 +1254,11 @@
                             </div>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display: none;" data-i18n="cancel">Cancel</button>
+                        <!-- FIXED SUBMIT BUTTONS - ALWAYS VISIBLE -->
+                        <div class="fixed-form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display: none;">
+                                ❌ <span data-i18n="cancel">Cancel</span>
+                            </button>
                             <button type="submit" class="btn btn-primary" id="submitBtn">
                                 ✅ <span data-i18n="add_item_btn">Add Menu Item</span>
                             </button>
@@ -1304,7 +1313,7 @@
                     <div class="error-message" id="passwordError" style="display: none;">
                         <span data-i18n="password_error">Passwords do not match or current password is incorrect.</span>
                     </div>
-                    <div class="form-actions">
+                    <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 25px;">
                         <button type="button" class="btn btn-secondary" id="cancelPasswordChange" data-i18n="cancel">Cancel</button>
                         <button type="submit" class="btn btn-primary" data-i18n="update_password">Update Password</button>
                     </div>
@@ -1340,7 +1349,7 @@
                         <label for="categoryEmoji" data-i18n="category_emoji">Category Emoji</label>
                         <input type="text" id="categoryEmoji" placeholder="🍴" maxlength="2" required>
                     </div>
-                    <div class="form-actions">
+                    <div style="display: flex; gap: 15px; justify-content: flex-end; margin-top: 25px;">
                         <button type="button" class="btn btn-secondary" id="cancelCategoryAdd" data-i18n="cancel">Cancel</button>
                         <button type="submit" class="btn btn-primary" id="submitCategoryBtn">
                             ✅ <span data-i18n="add_category_btn">Add Category</span>
@@ -1550,6 +1559,12 @@
             document.getElementById(`${viewName}-view`).style.display = 'block';
             document.querySelector(`[data-view="${viewName}"]`).classList.add('active');
             currentView = viewName;
+            
+            // Hide fixed buttons when not in add-item view
+            const fixedActions = document.querySelector('.fixed-form-actions');
+            if (fixedActions) {
+                fixedActions.style.display = viewName === 'add-item' ? 'flex' : 'none';
+            }
             
             if (viewName === 'menu-items') {
                 renderItemsList();
