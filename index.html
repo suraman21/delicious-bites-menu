@@ -113,7 +113,7 @@
         body {
             background: linear-gradient(to bottom, #fff5e6 0%, #ffe4cc 100%);
             color: #333;
-            padding-bottom: 20px;
+            padding-bottom: 80px;
             opacity: 0;
             transition: opacity 0.5s ease;
             min-height: 100vh;
@@ -121,6 +121,227 @@
 
         body.loaded {
             opacity: 1;
+        }
+
+        /* Language & Menu Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .menu-icon-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .menu-icon-btn span {
+            width: 25px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-icon-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translateY(8px);
+        }
+
+        .menu-icon-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-icon-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translateY(-8px);
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px;
+            border-radius: 25px;
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 8px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #ff6b6b;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100%;
+            background: white;
+            z-index: 9998;
+            transition: left 0.3s ease;
+            box-shadow: 5px 0 25px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9997;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-item {
+            padding: 18px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-item:hover {
+            background: #fff5f5;
+            border-left-color: #ff6b6b;
+        }
+
+        .sidebar-item-icon {
+            font-size: 1.5rem;
+            width: 35px;
+            text-align: center;
+        }
+
+        .sidebar-item-text {
+            flex: 1;
+        }
+
+        .sidebar-item-text h4 {
+            font-size: 1rem;
+            color: #2d3436;
+            margin-bottom: 3px;
+        }
+
+        .sidebar-item-text p {
+            font-size: 0.75rem;
+            color: #636e72;
+        }
+
+        .social-links {
+            padding: 25px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .social-links h4 {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .social-icon.facebook { background: #1877f2; color: white; }
+        .social-icon.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+        .social-icon.twitter { background: #1da1f2; color: white; }
+        .social-icon.telegram { background: #0088cc; color: white; }
+        .social-icon.tiktok { background: #000; color: white; }
+
+        .social-icon:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Main Content Spacing */
+        .main-content {
+            margin-top: 65px;
         }
 
         /* Header & Branding */
@@ -544,7 +765,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.85);
-            z-index: 1000;
+            z-index: 10000;
             padding: 10px;
             overflow-y: auto;
             backdrop-filter: blur(5px);
@@ -781,10 +1002,142 @@
             box-shadow: 0 -5px 20px rgba(255, 107, 107, 0.3);
         }
 
+        /* Feedback Modal */
+        .feedback-form-group {
+            margin-bottom: 20px;
+        }
+
+        .feedback-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+
+        .feedback-form-group input,
+        .feedback-form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .feedback-form-group input:focus,
+        .feedback-form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .feedback-form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 10px;
+            font-size: 2rem;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .rating-star {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #ddd;
+        }
+
+        .rating-star.active,
+        .rating-star:hover {
+            color: #feca57;
+            transform: scale(1.2);
+        }
+
+        .submit-feedback-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-feedback-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Contact Modal */
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .contact-info-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+
+        .contact-info-text h4 {
+            font-size: 0.9rem;
+            color: #636e72;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-info-text p {
+            font-size: 1.1rem;
+            color: #2d3436;
+            font-weight: 600;
+        }
+
+        .contact-info-text a {
+            color: #ff6b6b;
+            text-decoration: none;
+        }
+
+        /* Developer Branding */
+        .developer-branding {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #2d3436, #636e72);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.85rem;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
+            z-index: 998;
+        }
+
+        .developer-branding a {
+            color: #feca57;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .developer-branding a:hover {
+            text-decoration: underline;
+        }
+
         /* Cart Notification */
         .cart-notification {
             position: fixed;
-            bottom: 25px;
+            bottom: 70px;
             right: 25px;
             background: linear-gradient(135deg, #00b894, #00cec9);
             color: white;
@@ -817,6 +1170,10 @@
 
         /* Responsive */
         @media (min-width: 768px) {
+            .top-bar {
+                padding: 12px 25px;
+            }
+
             .header {
                 padding: 25px 20px;
                 margin: 15px 15px 20px;
@@ -851,6 +1208,10 @@
             .preloader-restaurant {
                 font-size: 4rem;
             }
+
+            .sidebar {
+                width: 320px;
+            }
         }
 
         @media (min-width: 1024px) {
@@ -871,48 +1232,106 @@
         <div class="preloader-spinner"></div>
     </div>
 
-    <!-- Header Section -->
-    <header class="header">
-        <div class="brand-content">
-            <span class="brand-icon">🍽️</span>
-            <div class="brand-name">Arkeon Ethiopia</div>
-            <div class="brand-tagline">Crafting Culinary Excellence</div>
-        </div>
-    </header>
-
-    <!-- Search Section -->
-    <div class="search-section">
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search for delicious dishes...">
+    <!-- Top Bar with Menu & Language -->
+    <div class="top-bar">
+        <button class="menu-icon-btn" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">English</button>
+            <button class="lang-btn" data-lang="am">አማርኛ</button>
         </div>
     </div>
 
-    <!-- Category Filter -->
-    <div class="category-section">
-        <div class="section-title">Categories</div>
-        <div class="category-filter">
-            <button class="filter-btn active" data-category="all">All</button>
-            <button class="filter-btn" data-category="breakfast">🍳 Breakfast</button>
-            <button class="filter-btn" data-category="lunch">🍔 Lunch</button>
-            <button class="filter-btn" data-category="dinner">🍕 Dinner</button>
-            <button class="filter-btn" data-category="dessert">🍦 Dessert</button>
-            <button class="filter-btn" data-category="drinks">☕ Drinks</button>
-            <button class="filter-btn" data-category="specials">⭐ Specials</button>
-            <button class="filter-btn" data-category="favorites">❤️ Favorites</button>
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 data-i18n="restaurant_name">Arkeon Ethiopia</h2>
+            <p data-i18n="tagline">Crafting Culinary Excellence</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="sidebar-item" id="feedbackBtn">
+                <span class="sidebar-item-icon">💬</span>
+                <div class="sidebar-item-text">
+                    <h4 data-i18n="menu_feedback">Feedback</h4>
+                    <p data-i18n="menu_feedback_desc">Share your thoughts</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-item" id="contactBtn">
+                <span class="sidebar-item-icon">📞</span>
+                <div class="sidebar-item-text">
+                    <h4 data-i18n="menu_contact">Contact Us</h4>
+                    <p data-i18n="menu_contact_desc">Get in touch</p>
+                </div>
+            </div>
+            
+            <div class="sidebar-item" id="reviewBtn">
+                <span class="sidebar-item-icon">⭐</span>
+                <div class="sidebar-item-text">
+                    <h4 data-i18n="menu_review">Write a Review</h4>
+                    <p data-i18n="menu_review_desc">Rate us on Google</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="social-links">
+            <h4 data-i18n="follow_us">Follow Us</h4>
+            <div class="social-icons" id="socialIcons">
+                <!-- Social icons will be loaded dynamically -->
+            </div>
         </div>
     </div>
 
-    <!-- Menu Grid -->
-    <div class="menu-container">
-        <div class="section-title">Our Menu</div>
-        <div class="menu-grid" id="menuGrid"></div>
+    <div class="main-content">
+        <!-- Header Section -->
+        <header class="header">
+            <div class="brand-content">
+                <span class="brand-icon">🍽️</span>
+                <div class="brand-name" data-i18n="restaurant_name">Arkeon Ethiopia</div>
+                <div class="brand-tagline" data-i18n="tagline">Crafting Culinary Excellence Since 2010</div>
+            </div>
+        </header>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="Search for delicious dishes...">
+            </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="category-section">
+            <div class="section-title" data-i18n="categories">Categories</div>
+            <div class="category-filter">
+                <button class="filter-btn active" data-category="all" data-i18n="cat_all">All</button>
+                <button class="filter-btn" data-category="breakfast"><span>🍳</span> <span data-i18n="cat_breakfast">Breakfast</span></button>
+                <button class="filter-btn" data-category="lunch"><span>🍔</span> <span data-i18n="cat_lunch">Lunch</span></button>
+                <button class="filter-btn" data-category="dinner"><span>🍕</span> <span data-i18n="cat_dinner">Dinner</span></button>
+                <button class="filter-btn" data-category="dessert"><span>🍦</span> <span data-i18n="cat_dessert">Dessert</span></button>
+                <button class="filter-btn" data-category="drinks"><span>☕</span> <span data-i18n="cat_drinks">Drinks</span></button>
+                <button class="filter-btn" data-category="specials"><span>⭐</span> <span data-i18n="cat_specials">Specials</span></button>
+                <button class="filter-btn" data-category="favorites"><span>❤️</span> <span data-i18n="cat_favorites">Favorites</span></button>
+            </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-container">
+            <div class="section-title" data-i18n="our_menu">Our Menu</div>
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
     </div>
 
     <!-- Detail Modal -->
     <div class="modal" id="detailModal">
         <div class="modal-content">
             <button class="close-btn" id="closeModal">✕</button>
-            <div class="detail-image-container" id="detailImageContainer">
+            <div class="detail-image-container">
                 <img class="detail-image" id="detailImage" alt="Food item">
                 <div class="detail-image-placeholder" id="detailImagePlaceholder">🍽️</div>
                 <div class="detail-badge" id="detailBadge">Popular</div>
@@ -925,24 +1344,24 @@
                 <div class="nutrition-info">
                     <div class="nutrition-item">
                         <div class="nutrition-value" id="nutritionCalories">0</div>
-                        <div class="nutrition-label">kcal</div>
+                        <div class="nutrition-label" data-i18n="kcal">kcal</div>
                     </div>
                     <div class="nutrition-item">
                         <div class="nutrition-value" id="nutritionProteins">0</div>
-                        <div class="nutrition-label">protein</div>
+                        <div class="nutrition-label" data-i18n="protein">protein</div>
                     </div>
                     <div class="nutrition-item">
                         <div class="nutrition-value" id="nutritionFats">0</div>
-                        <div class="nutrition-label">fats</div>
+                        <div class="nutrition-label" data-i18n="fats">fats</div>
                     </div>
                     <div class="nutrition-item">
                         <div class="nutrition-value" id="nutritionCarbs">0</div>
-                        <div class="nutrition-label">carbs</div>
+                        <div class="nutrition-label" data-i18n="carbs">carbs</div>
                     </div>
                 </div>
 
                 <div class="detail-section">
-                    <h3>Description</h3>
+                    <h3 data-i18n="description">Description</h3>
                     <p class="detail-description" id="detailDescription">
                         Food description will appear here.
                     </p>
@@ -953,6 +1372,68 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="modal" id="feedbackModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeFeedback">✕</button>
+            <div class="sidebar-header">
+                <h2 data-i18n="feedback_title">Send Us Feedback</h2>
+                <p data-i18n="feedback_subtitle">We'd love to hear from you!</p>
+            </div>
+            <div class="detail-content">
+                <form id="feedbackForm">
+                    <div class="feedback-form-group">
+                        <label data-i18n="feedback_name">Your Name</label>
+                        <input type="text" id="feedbackName" required>
+                    </div>
+                    <div class="feedback-form-group">
+                        <label data-i18n="feedback_email">Email (Optional)</label>
+                        <input type="email" id="feedbackEmail">
+                    </div>
+                    <div class="feedback-form-group">
+                        <label data-i18n="feedback_phone">Phone (Optional)</label>
+                        <input type="tel" id="feedbackPhone">
+                    </div>
+                    <div class="feedback-form-group">
+                        <label data-i18n="feedback_rating">Rate Your Experience</label>
+                        <div class="rating-stars" id="ratingStars">
+                            <span class="rating-star" data-rating="1">★</span>
+                            <span class="rating-star" data-rating="2">★</span>
+                            <span class="rating-star" data-rating="3">★</span>
+                            <span class="rating-star" data-rating="4">★</span>
+                            <span class="rating-star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    <div class="feedback-form-group">
+                        <label data-i18n="feedback_message">Your Message</label>
+                        <textarea id="feedbackMessage" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-feedback-btn" data-i18n="submit_feedback">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <button class="close-btn" id="closeContact">✕</button>
+            <div class="sidebar-header">
+                <h2 data-i18n="contact_title">Contact Us</h2>
+                <p data-i18n="contact_subtitle">Get in touch with us</p>
+            </div>
+            <div class="detail-content" id="contactInfo">
+                <!-- Contact info will be loaded dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Branding -->
+    <div class="developer-branding">
+        <span data-i18n="developed_by">Developed by</span> <a href="https://yourwebsite.com" target="_blank">YourName</a> | 
+        <span data-i18n="powered_by">Powered by Supabase</span>
     </div>
 
     <!-- Cart Notification -->
@@ -968,12 +1449,113 @@
 
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // ===== TRANSLATIONS =====
+        const translations = {
+            en: {
+                restaurant_name: 'Arkeon Ethiopia',
+                tagline: 'Crafting Culinary Excellence Since 2010',
+                search_placeholder: 'Search for delicious dishes...',
+                categories: 'Categories',
+                cat_all: 'All',
+                cat_breakfast: 'Breakfast',
+                cat_lunch: 'Lunch',
+                cat_dinner: 'Dinner',
+                cat_dessert: 'Dessert',
+                cat_drinks: 'Drinks',
+                cat_specials: 'Specials',
+                cat_favorites: 'Favorites',
+                our_menu: 'Our Menu',
+                description: 'Description',
+                kcal: 'kcal',
+                protein: 'protein',
+                fats: 'fats',
+                carbs: 'carbs',
+                menu_feedback: 'Feedback',
+                menu_feedback_desc: 'Share your thoughts',
+                menu_contact: 'Contact Us',
+                menu_contact_desc: 'Get in touch',
+                menu_review: 'Write a Review',
+                menu_review_desc: 'Rate us on Google',
+                follow_us: 'Follow Us',
+                feedback_title: 'Send Us Feedback',
+                feedback_subtitle: "We'd love to hear from you!",
+                feedback_name: 'Your Name',
+                feedback_email: 'Email (Optional)',
+                feedback_phone: 'Phone (Optional)',
+                feedback_rating: 'Rate Your Experience',
+                feedback_message: 'Your Message',
+                submit_feedback: 'Submit Feedback',
+                contact_title: 'Contact Us',
+                contact_subtitle: 'Get in touch with us',
+                developed_by: 'Developed by',
+                powered_by: 'Powered by Supabase',
+                empty_favorites: 'No Favorites Yet!',
+                empty_favorites_desc: 'Start adding your favorite dishes by clicking the heart icon on any menu item.<br><br>Your favorites will appear here for quick access!',
+                empty_menu: 'Welcome to Arkeon Ethiopia!',
+                empty_menu_desc: 'Our culinary masterpieces are being prepared.<br>Check back soon for an extraordinary dining experience!',
+                added_favorites: 'Added to favorites!',
+                removed_favorites: 'Removed from favorites!',
+                feedback_success: 'Thank you for your feedback!',
+                feedback_error: 'Error submitting feedback. Please try again.'
+            },
+            am: {
+                restaurant_name: 'አርኬን ኢትዮጵያ',
+                tagline: 'ከ 2010 ዓ.ም ጀምሮ የምግብ ብቃት እየፈጠርን',
+                search_placeholder: 'ለጣዕም ምግቦች ይፈልጉ...',
+                categories: 'ምድቦች',
+                cat_all: 'ሁሉም',
+                cat_breakfast: 'ቁርስ',
+                cat_lunch: 'ምሳ',
+                cat_dinner: 'እራት',
+                cat_dessert: 'ጣፋጭ',
+                cat_drinks: 'መጠጦች',
+                cat_specials: 'ልዩ',
+                cat_favorites: 'ተወዳጆች',
+                our_menu: 'የእኛ ምናሌ',
+                description: 'መግለጫ',
+                kcal: 'ካሎሪ',
+                protein: 'ፕሮቲን',
+                fats: 'ስብ',
+                carbs: 'ካርቦ',
+                menu_feedback: 'አስተያየት',
+                menu_feedback_desc: 'ሀሳብዎን ያጋሩ',
+                menu_contact: 'አግኙን',
+                menu_contact_desc: 'ያነጋግሩን',
+                menu_review: 'ግምገማ ይስጡ',
+                menu_review_desc: 'በጉግል ላይ ይገምግሙን',
+                follow_us: 'ይከታተሉን',
+                feedback_title: 'አስተያየት ይላኩልን',
+                feedback_subtitle: 'ከእርስዎ መስማት እንወዳለን!',
+                feedback_name: 'ስምዎ',
+                feedback_email: 'ኢሜይል (አማራጭ)',
+                feedback_phone: 'ስልክ (አማራጭ)',
+                feedback_rating: 'ተሞክሮዎን ይገምግሙ',
+                feedback_message: 'መልእክትዎ',
+                submit_feedback: 'አስተያየት ላክ',
+                contact_title: 'አግኙን',
+                contact_subtitle: 'ያናግሩን',
+                developed_by: 'የተገነባው በ',
+                powered_by: 'የሚንቀሳቀሰው በ Supabase',
+                empty_favorites: 'ገና ምንም ተወዳጅ የለም!',
+                empty_favorites_desc: 'በማንኛውም የምግብ ዕቃ ላይ የልብ ምልክቱን በመጫን ተወዳጅ ምግቦችዎን ማከል ይጀምሩ።<br><br>ተወዳጆችዎ ለፈጣን መዳረሻ እዚህ ይታያሉ!',
+                empty_menu: 'እንኳን ወደ አርኬን ኢትዮጵያ በደህና መጡ!',
+                empty_menu_desc: 'የእኛ ምግብ ብቃቶች እየተዘጋጁ ነው።<br>ለልዩ የምግብ ልምድ በቅርቡ ይመለሱ!',
+                added_favorites: 'ወደ ተወዳጆች ታክሏል!',
+                removed_favorites: 'ከተወዳጆች ተወግዷል!',
+                feedback_success: 'ለአስተያየትዎ እናመሰግናለን!',
+                feedback_error: 'አስተያየት በማስገባት ላይ ስህተት። እባክዎ እንደገና ይሞክሩ።'
+            }
+        };
+
         // ===== APPLICATION STATE =====
         let menuData = [];
+        let restaurantSettings = null;
         let currentFilter = 'all';
         let currentSearchTerm = '';
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         let currentItem = null;
+        let currentLanguage = localStorage.getItem('language') || 'en';
+        let currentRating = 0;
 
         // DOM Elements
         const preloader = document.getElementById('preloader');
@@ -984,6 +1566,217 @@
         const searchInput = document.getElementById('searchInput');
         const detailFavoriteBtn = document.getElementById('detailFavorite');
         const cartNotification = document.getElementById('cartNotification');
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const langBtns = document.querySelectorAll('.lang-btn');
+        const feedbackBtn = document.getElementById('feedbackBtn');
+        const contactBtn = document.getElementById('contactBtn');
+        const reviewBtn = document.getElementById('reviewBtn');
+        const feedbackModal = document.getElementById('feedbackModal');
+        const contactModal = document.getElementById('contactModal');
+        const closeFeedback = document.getElementById('closeFeedback');
+        const closeContact = document.getElementById('closeContact');
+        const feedbackForm = document.getElementById('feedbackForm');
+        const ratingStars = document.querySelectorAll('.rating-star');
+
+        // ===== LANGUAGE SWITCHING =====
+        function switchLanguage(lang) {
+            currentLanguage = lang;
+            localStorage.setItem('language', lang);
+            
+            // Update active button
+            langBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            
+            // Update all translatable elements
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            
+            // Update placeholder
+            const placeholder = searchInput.getAttribute('data-i18n-placeholder');
+            if (placeholder && translations[lang][placeholder]) {
+                searchInput.placeholder = translations[lang][placeholder];
+            }
+            
+            // Re-render menu items with new language
+            applyFilters();
+        }
+
+        function getItemText(item, field) {
+            const amField = field + '_am';
+            if (currentLanguage === 'am' && item[amField]) {
+                return item[amField];
+            }
+            return item[field];
+        }
+
+        // ===== SIDEBAR FUNCTIONS =====
+        function toggleSidebar() {
+            const isActive = sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active', isActive);
+            menuToggle.classList.toggle('active', isActive);
+            document.body.style.overflow = isActive ? 'hidden' : 'auto';
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+            menuToggle.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ===== LOAD RESTAURANT SETTINGS =====
+        async function loadRestaurantSettings() {
+            try {
+                const { data, error } = await supabase
+                    .from('restaurant_settings')
+                    .select('*')
+                    .limit(1)
+                    .single();
+
+                if (error) throw error;
+                
+                restaurantSettings = data;
+                updateSocialLinks();
+                
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                restaurantSettings = {
+                    restaurant_name: 'Arkeon Ethiopia',
+                    phone: '+251 11 123 4567',
+                    email: 'info@arkeonethiopia.com',
+                    address: 'Bole, Addis Ababa, Ethiopia',
+                    google_review_url: 'https://g.page/review'
+                };
+            }
+        }
+
+        function updateSocialLinks() {
+            const socialIcons = document.getElementById('socialIcons');
+            socialIcons.innerHTML = '';
+            
+            const socials = [
+                { platform: 'facebook', icon: '📘', url: restaurantSettings?.facebook_url },
+                { platform: 'instagram', icon: '📷', url: restaurantSettings?.instagram_url },
+                { platform: 'twitter', icon: '🐦', url: restaurantSettings?.twitter_url },
+                { platform: 'telegram', icon: '✈️', url: restaurantSettings?.telegram_url },
+                { platform: 'tiktok', icon: '🎵', url: restaurantSettings?.tiktok_url }
+            ];
+            
+            socials.forEach(social => {
+                if (social.url) {
+                    const link = document.createElement('a');
+                    link.href = social.url;
+                    link.target = '_blank';
+                    link.className = `social-icon ${social.platform}`;
+                    link.textContent = social.icon;
+                    socialIcons.appendChild(link);
+                }
+            });
+        }
+
+        // ===== FEEDBACK FUNCTIONS =====
+        function setupRatingStars() {
+            ratingStars.forEach(star => {
+                star.addEventListener('click', () => {
+                    currentRating = parseInt(star.dataset.rating);
+                    updateStarDisplay();
+                });
+                
+                star.addEventListener('mouseenter', () => {
+                    const rating = parseInt(star.dataset.rating);
+                    ratingStars.forEach((s, i) => {
+                        s.classList.toggle('active', i < rating);
+                    });
+                });
+            });
+            
+            document.querySelector('.rating-stars').addEventListener('mouseleave', updateStarDisplay);
+        }
+
+        function updateStarDisplay() {
+            ratingStars.forEach((star, i) => {
+                star.classList.toggle('active', i < currentRating);
+            });
+        }
+
+        async function submitFeedback(e) {
+            e.preventDefault();
+            
+            const feedbackData = {
+                name: document.getElementById('feedbackName').value,
+                email: document.getElementById('feedbackEmail').value || null,
+                phone: document.getElementById('feedbackPhone').value || null,
+                rating: currentRating,
+                message: document.getElementById('feedbackMessage').value
+            };
+            
+            try {
+                const { error } = await supabase
+                    .from('feedback')
+                    .insert([feedbackData]);
+
+                if (error) throw error;
+                
+                showNotification(translations[currentLanguage].feedback_success);
+                feedbackModal.style.display = 'none';
+                feedbackForm.reset();
+                currentRating = 0;
+                updateStarDisplay();
+                
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                showNotification(translations[currentLanguage].feedback_error);
+            }
+        }
+
+        // ===== CONTACT MODAL =====
+        function showContactModal() {
+            const contactInfo = document.getElementById('contactInfo');
+            
+            const nameKey = currentLanguage === 'am' ? 'restaurant_name_am' : 'restaurant_name';
+            const addressKey = currentLanguage === 'am' ? 'address_am' : 'address';
+            
+            contactInfo.innerHTML = `
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">🏢</div>
+                    <div class="contact-info-text">
+                        <h4>${currentLanguage === 'am' ? 'ሬስቶራንት' : 'Restaurant'}</h4>
+                        <p>${restaurantSettings[nameKey]}</p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">📞</div>
+                    <div class="contact-info-text">
+                        <h4>${currentLanguage === 'am' ? 'ስልክ' : 'Phone'}</h4>
+                        <p><a href="tel:${restaurantSettings.phone}">${restaurantSettings.phone}</a></p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">✉️</div>
+                    <div class="contact-info-text">
+                        <h4>${currentLanguage === 'am' ? 'ኢሜይል' : 'Email'}</h4>
+                        <p><a href="mailto:${restaurantSettings.email}">${restaurantSettings.email}</a></p>
+                    </div>
+                </div>
+                <div class="contact-info-item">
+                    <div class="contact-info-icon">📍</div>
+                    <div class="contact-info-text">
+                        <h4>${currentLanguage === 'am' ? 'አድራሻ' : 'Address'}</h4>
+                        <p>${restaurantSettings[addressKey]}</p>
+                    </div>
+                </div>
+            `;
+            
+            contactModal.style.display = 'block';
+            closeSidebar();
+        }
 
         // ===== PRELOADER FUNCTIONS =====
         function hidePreloader() {
@@ -1006,12 +1799,10 @@
                 menuData = data || [];
                 
                 if (menuData.length > 0) {
-                    // Show first 6 items immediately
                     const initialBatch = menuData.slice(0, 6);
                     renderMenuItems(initialBatch, false);
                     hidePreloader();
                     
-                    // Load rest after 100ms
                     setTimeout(() => {
                         const remainingItems = menuData.slice(6);
                         if (remainingItems.length > 0) {
@@ -1032,20 +1823,21 @@
 
         // ===== UI FUNCTIONS =====
         function showEmptyState(isFavorites = false) {
+            const lang = currentLanguage;
             if (isFavorites) {
                 menuGrid.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">💔</div>
-                        <h3>No Favorites Yet!</h3>
-                        <p>Start adding your favorite dishes by clicking the heart icon on any menu item.<br><br>Your favorites will appear here for quick access!</p>
+                        <h3>${translations[lang].empty_favorites}</h3>
+                        <p>${translations[lang].empty_favorites_desc}</p>
                     </div>
                 `;
             } else {
                 menuGrid.innerHTML = `
                     <div class="empty-state">
                         <div class="empty-state-icon">🍽️</div>
-                        <h3>Welcome to Arkeon Ethiopia!</h3>
-                        <p>Our culinary masterpieces are being prepared.<br>Check back soon for an extraordinary dining experience!</p>
+                        <h3>${translations[lang].empty_menu}</h3>
+                        <p>${translations[lang].empty_menu_desc}</p>
                     </div>
                 `;
             }
@@ -1057,7 +1849,6 @@
             }
             
             if (items.length === 0 && clearFirst) {
-                // Check if we're on favorites filter
                 const isFavoritesFilter = currentFilter === 'favorites';
                 showEmptyState(isFavoritesFilter);
                 return;
@@ -1091,18 +1882,21 @@
             menuItem.className = 'menu-item';
             menuItem.style.animationDelay = `${index * 0.05}s`;
             
+            const name = getItemText(item, 'name');
+            const description = getItemText(item, 'description');
+            
             menuItem.innerHTML = `
                 <div class="item-image-container">
                     <div class="image-placeholder">🍽️</div>
-                    <img class="item-image" data-src="${item.image}" alt="${item.name}">
+                    <img class="item-image" data-src="${item.image}" alt="${name}">
                     <div class="item-badge">${item.badge}</div>
                     <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-id="${item.id}">
                         ${isFavorite ? '❤' : '🤍'}
                     </button>
                 </div>
                 <div class="item-content">
-                    <h3 class="item-name">${item.name}</h3>
-                    <p class="item-description">${item.description}</p>
+                    <h3 class="item-name">${name}</h3>
+                    <p class="item-description">${description}</p>
                     <div class="item-price">
                         ETB ${parseFloat(item.price).toFixed(2)}
                         <button class="view-details" data-id="${item.id}">👁️</button>
@@ -1128,7 +1922,6 @@
                 openDetailModal(item);
             });
             
-            // Lazy load image
             const img = menuItem.querySelector('.item-image');
             const placeholder = menuItem.querySelector('.image-placeholder');
             
@@ -1163,20 +1956,22 @@
             
             const detailImage = document.getElementById('detailImage');
             const detailPlaceholder = document.getElementById('detailImagePlaceholder');
-            
-            // Reset to show placeholder first
             detailImage.classList.remove('loaded');
             detailPlaceholder.classList.remove('hidden');
             detailPlaceholder.innerHTML = '🍽️';
             
+            const name = getItemText(item, 'name');
+            const description = getItemText(item, 'description');
+            const location = getItemText(item, 'location');
+            
             detailImage.src = item.image;
-            detailImage.alt = item.name;
+            detailImage.alt = name;
             document.getElementById('detailBadge').textContent = item.badge;
             detailFavoriteBtn.innerHTML = isFavorite ? '❤' : '🤍';
             detailFavoriteBtn.className = `detail-favorite ${isFavorite ? 'active' : ''}`;
-            document.getElementById('detailName').textContent = item.name;
-            document.getElementById('detailLocation').textContent = item.location;
-            document.getElementById('detailDescription').textContent = item.description;
+            document.getElementById('detailName').textContent = name;
+            document.getElementById('detailLocation').textContent = location;
+            document.getElementById('detailDescription').textContent = description;
             
             let nutrition = item.nutrition;
             if (typeof nutrition === 'string') {
@@ -1197,7 +1992,6 @@
             detailModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
             
-            // Load image and hide placeholder when loaded
             detailImage.addEventListener('load', function() {
                 this.classList.add('loaded');
                 detailPlaceholder.classList.add('hidden');
@@ -1217,10 +2011,10 @@
             const index = favorites.indexOf(itemId);
             if (index > -1) {
                 favorites.splice(index, 1);
-                showNotification('Removed from favorites!');
+                showNotification(translations[currentLanguage].removed_favorites);
             } else {
                 favorites.push(itemId);
-                showNotification('Added to favorites!');
+                showNotification(translations[currentLanguage].added_favorites);
             }
             localStorage.setItem('favorites', JSON.stringify(favorites));
             
@@ -1272,10 +2066,11 @@
             
             if (currentSearchTerm) {
                 const term = currentSearchTerm.toLowerCase();
-                filteredItems = filteredItems.filter(item => 
-                    item.name.toLowerCase().includes(term) || 
-                    item.description.toLowerCase().includes(term)
-                );
+                filteredItems = filteredItems.filter(item => {
+                    const name = getItemText(item, 'name').toLowerCase();
+                    const description = getItemText(item, 'description').toLowerCase();
+                    return name.includes(term) || description.includes(term);
+                });
             }
             
             renderMenuItems(filteredItems);
@@ -1283,6 +2078,31 @@
 
         // ===== EVENT LISTENERS =====
         function setupEventListeners() {
+            // Menu toggle
+            menuToggle.addEventListener('click', toggleSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar);
+            
+            // Language switch
+            langBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchLanguage(btn.dataset.lang);
+                });
+            });
+            
+            // Sidebar items
+            feedbackBtn.addEventListener('click', () => {
+                feedbackModal.style.display = 'block';
+                closeSidebar();
+            });
+            
+            contactBtn.addEventListener('click', showContactModal);
+            
+            reviewBtn.addEventListener('click', () => {
+                window.open(restaurantSettings?.google_review_url || 'https://g.page/review', '_blank');
+                closeSidebar();
+            });
+            
+            // Filter buttons
             filterBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     filterBtns.forEach(b => b.classList.remove('active'));
@@ -1291,6 +2111,7 @@
                 });
             });
 
+            // Search
             let searchTimeout;
             searchInput.addEventListener('input', (e) => {
                 clearTimeout(searchTimeout);
@@ -1300,12 +2121,28 @@
                 }, 300);
             });
 
+            // Modal close
             closeModal.addEventListener('click', closeDetailModal);
+            closeFeedback.addEventListener('click', () => {
+                feedbackModal.style.display = 'none';
+            });
+            closeContact.addEventListener('click', () => {
+                contactModal.style.display = 'none';
+            });
             
             detailModal.addEventListener('click', (e) => {
                 if (e.target === detailModal) closeDetailModal();
             });
+            
+            feedbackModal.addEventListener('click', (e) => {
+                if (e.target === feedbackModal) feedbackModal.style.display = 'none';
+            });
+            
+            contactModal.addEventListener('click', (e) => {
+                if (e.target === contactModal) contactModal.style.display = 'none';
+            });
 
+            // Detail favorite button
             detailFavoriteBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (currentItem) {
@@ -1313,14 +2150,26 @@
                 }
             });
 
+            // Feedback form
+            feedbackForm.addEventListener('submit', submitFeedback);
+            setupRatingStars();
+
+            // Keyboard
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeDetailModal();
+                if (e.key === 'Escape') {
+                    closeDetailModal();
+                    feedbackModal.style.display = 'none';
+                    contactModal.style.display = 'none';
+                    closeSidebar();
+                }
             });
         }
 
         // ===== INITIALIZATION =====
         async function initializeApp() {
             setupEventListeners();
+            switchLanguage(currentLanguage);
+            await loadRestaurantSettings();
             await loadMenuItems();
             updateFavoritesUI();
         }
