@@ -211,7 +211,7 @@
         .admin-content {
             display: grid;
             grid-template-columns: 300px 1fr;
-            min-height: calc(100vh - 100px);
+            height: calc(100vh - 100px);
             max-height: 85vh;
         }
 
@@ -273,6 +273,7 @@
         /* Main Panel */
         .admin-main {
             padding: 30px;
+            padding-bottom: 100px; /* Extra padding for sticky footer */
             overflow-y: auto;
             background: white;
             position: relative;
@@ -608,6 +609,24 @@
             background: #c0392b;
         }
 
+        /* STICKY FORM ACTIONS - THIS IS THE FIX */
+        .form-actions-sticky {
+            position: sticky;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 20px 30px;
+            border-top: 2px solid #e9ecef;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin: 25px -30px -30px -30px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
         .form-actions {
             display: flex;
             gap: 15px;
@@ -616,7 +635,7 @@
             flex-wrap: wrap;
         }
 
-        /* Floating Action Button - NEW */
+        /* Floating Action Button */
         .fab-container {
             position: fixed;
             bottom: 30px;
@@ -918,6 +937,7 @@
         @media (max-width: 1024px) {
             .admin-content {
                 grid-template-columns: 1fr;
+                height: auto;
             }
 
             .admin-sidebar {
@@ -938,6 +958,7 @@
 
             .admin-main {
                 padding: 20px;
+                padding-bottom: 100px;
             }
 
             .panel-header {
@@ -970,6 +991,11 @@
                 width: 55px;
                 height: 55px;
                 font-size: 1.5rem;
+            }
+
+            .form-actions-sticky {
+                padding: 15px 20px;
+                margin: 25px -20px -20px -20px;
             }
         }
     </style>
@@ -1286,8 +1312,11 @@
                             </div>
                         </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display: none;" data-i18n="cancel">Cancel</button>
+                        <!-- STICKY SUBMIT BUTTONS - THIS IS THE KEY FIX -->
+                        <div class="form-actions-sticky">
+                            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display: none;">
+                                ❌ <span data-i18n="cancel">Cancel</span>
+                            </button>
                             <button type="submit" class="btn btn-primary" id="submitBtn">
                                 ✅ <span data-i18n="add_item_btn">Add Menu Item</span>
                             </button>
@@ -1686,6 +1715,8 @@
             reader.onload = (e) => {
                 document.getElementById('imagePreview').src = e.target.result;
                 document.getElementById('imagePreviewContainer').style.display = 'block';
+                // Set hidden input so form validation passes
+                document.getElementById('itemImage').value = 'pending-upload';
             };
             reader.readAsDataURL(file);
         }
@@ -2103,7 +2134,7 @@
             isEditing = true;
             currentEditId = itemId;
             document.getElementById('formTitle').textContent = 'Edit Menu Item';
-            document.getElementById('submitBtn').innerHTML = '✅ Update Item';
+            document.getElementById('submitBtn').innerHTML = '✅ <span>Update Item</span>';
             document.getElementById('cancelEdit').style.display = 'block';
 
             switchView('add-item');
@@ -2115,7 +2146,7 @@
             isEditing = false;
             currentEditId = null;
             document.getElementById('formTitle').textContent = 'Add New Menu Item';
-            document.getElementById('submitBtn').innerHTML = '✅ Add Menu Item';
+            document.getElementById('submitBtn').innerHTML = '✅ <span>Add Menu Item</span>';
             document.getElementById('cancelEdit').style.display = 'none';
             document.getElementById('itemLocationEn').value = 'Addis Ababa, Ethiopia';
             document.getElementById('itemLocationAm').value = 'አዲስ አበባ፣ ኢትዮጵያ';
