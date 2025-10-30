@@ -229,7 +229,7 @@
         .admin-content {
             display: grid;
             grid-template-columns: 300px 1fr;
-            height: calc(100vh - 100px);
+            min-height: calc(100vh - 100px);
             max-height: 85vh;
         }
 
@@ -291,10 +291,8 @@
         /* Main Panel */
         .admin-main {
             padding: 30px;
-            padding-bottom: 100px; /* Extra padding for sticky footer */
             overflow-y: auto;
             background: white;
-            position: relative;
         }
 
         .panel-header {
@@ -302,8 +300,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
         }
 
         .panel-title {
@@ -578,7 +574,6 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            white-space: nowrap;
         }
 
         .btn-primary {
@@ -627,63 +622,11 @@
             background: #c0392b;
         }
 
-        /* STICKY FORM ACTIONS - THIS IS THE FIX */
-        .form-actions-sticky {
-            position: sticky;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            padding: 20px 30px;
-            border-top: 2px solid #e9ecef;
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin: 25px -30px -30px -30px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
-            z-index: 100;
-            flex-wrap: wrap;
-        }
-
         .form-actions {
             display: flex;
             gap: 15px;
             justify-content: flex-end;
             margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
-        /* Floating Action Button */
-        .fab-container {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-        }
-
-        .fab {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-            color: white;
-            border: none;
-            font-size: 1.8rem;
-            cursor: pointer;
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .fab:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.5);
-        }
-
-        .fab:active {
-            transform: scale(0.95) rotate(90deg);
         }
 
         /* Items List */
@@ -955,7 +898,6 @@
         @media (max-width: 1024px) {
             .admin-content {
                 grid-template-columns: 1fr;
-                height: auto;
             }
 
             .admin-sidebar {
@@ -976,7 +918,6 @@
 
             .admin-main {
                 padding: 20px;
-                padding-bottom: 100px;
             }
 
             .panel-header {
@@ -998,22 +939,6 @@
             .item-actions {
                 width: 100%;
                 justify-content: space-between;
-            }
-
-            .fab-container {
-                bottom: 20px;
-                right: 20px;
-            }
-
-            .fab {
-                width: 55px;
-                height: 55px;
-                font-size: 1.5rem;
-            }
-
-            .form-actions-sticky {
-                padding: 15px 20px;
-                margin: 25px -20px -20px -20px;
             }
         }
     </style>
@@ -1054,13 +979,6 @@
     <div class="admin-panel" id="adminPanel">
         <!-- Sync Indicator -->
         <div class="sync-indicator" id="syncIndicator">🔄 Syncing...</div>
-
-        <!-- Floating Action Button (visible on menu items page) -->
-        <div class="fab-container" id="fabContainer" style="display: none;">
-            <button class="fab" onclick="switchView('add-item')" title="Add New Item">
-                ➕
-            </button>
-        </div>
 
         <!-- Navigation Bar -->
         <nav class="admin-navbar">
@@ -1330,11 +1248,8 @@
                             </div>
                         </div>
 
-                        <!-- STICKY SUBMIT BUTTONS - THIS IS THE KEY FIX -->
-                        <div class="form-actions-sticky">
-                            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display: none;">
-                                ❌ <span data-i18n="cancel">Cancel</span>
-                            </button>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelEdit" style="display: none;" data-i18n="cancel">Cancel</button>
                             <button type="submit" class="btn btn-primary" id="submitBtn">
                                 ✅ <span data-i18n="add_item_btn">Add Menu Item</span>
                             </button>
@@ -1636,14 +1551,6 @@
             document.querySelector(`[data-view="${viewName}"]`).classList.add('active');
             currentView = viewName;
             
-            // Show/hide FAB based on view
-            const fabContainer = document.getElementById('fabContainer');
-            if (viewName === 'menu-items') {
-                fabContainer.style.display = 'block';
-            } else {
-                fabContainer.style.display = 'none';
-            }
-            
             if (viewName === 'menu-items') {
                 renderItemsList();
             } else if (viewName === 'categories') {
@@ -1733,8 +1640,6 @@
             reader.onload = (e) => {
                 document.getElementById('imagePreview').src = e.target.result;
                 document.getElementById('imagePreviewContainer').style.display = 'block';
-                // Set hidden input so form validation passes
-                document.getElementById('itemImage').value = 'pending-upload';
             };
             reader.readAsDataURL(file);
         }
@@ -2152,7 +2057,7 @@
             isEditing = true;
             currentEditId = itemId;
             document.getElementById('formTitle').textContent = 'Edit Menu Item';
-            document.getElementById('submitBtn').innerHTML = '✅ <span>Update Item</span>';
+            document.getElementById('submitBtn').innerHTML = '✅ Update Item';
             document.getElementById('cancelEdit').style.display = 'block';
 
             switchView('add-item');
@@ -2164,7 +2069,7 @@
             isEditing = false;
             currentEditId = null;
             document.getElementById('formTitle').textContent = 'Add New Menu Item';
-            document.getElementById('submitBtn').innerHTML = '✅ <span>Add Menu Item</span>';
+            document.getElementById('submitBtn').innerHTML = '✅ Add Menu Item';
             document.getElementById('cancelEdit').style.display = 'none';
             document.getElementById('itemLocationEn').value = 'Addis Ababa, Ethiopia';
             document.getElementById('itemLocationAm').value = 'አዲስ አበባ፣ ኢትዮጵያ';
@@ -2307,4 +2212,3 @@
     </script>
 </body>
 </html>
-
